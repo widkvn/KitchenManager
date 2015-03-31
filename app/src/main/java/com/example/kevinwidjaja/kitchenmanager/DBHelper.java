@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
+/** Database Helper class for initialization
  * Created by kevinwidjaja on 3/30/15.
  */
 public class DBHelper extends SQLiteOpenHelper{
@@ -20,6 +20,10 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String TABLE_SHOP = "shoppingList";
     public static final String TABLE_INV = "inventoryList";
 
+    //Table 1
+
+    //Table 2
+
     //Common column name
     public static final String ID_COLUMN = "id";
     public static final String ITEM_COLUMN = "item";
@@ -30,6 +34,7 @@ public class DBHelper extends SQLiteOpenHelper{
             "CREATE TABLE %s (" + " %s integer primary key autoincrement, " +
                     " %s text)",
             TABLE_SHOP,ID_COLUMN,ITEM_COLUMN);
+
     //Inventory list table
     private static final String CREATE_TABLE_INV = String.format(
             "CREATE TABLE %s (" + " %s integer primary key autoincrement, " +
