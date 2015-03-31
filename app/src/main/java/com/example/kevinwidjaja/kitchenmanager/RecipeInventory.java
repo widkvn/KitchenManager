@@ -12,10 +12,10 @@ public class RecipeInventory {
     private int quantity;
 
     //constructor
-    public Recipe(){
+    public RecipeInventory(){
     }
 
-    public Recipe(int id, int recipe_id, int inventory_id, int quantity){
+    public RecipeInventory(int id, int recipe_id, int inventory_id, int quantity){
         this.id = id;
         this.recipe_id = recipe_id;
         this.inventory_id = inventory_id;
