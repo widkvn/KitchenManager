@@ -10,6 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper{
 
+    //Logcat tag
+    private static final String LOG = "DBHelper";
+
     //Database version
     private static final int DATABASE_VERSION = 1;
 
@@ -17,29 +20,137 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "kitchenManager";
 
     //Table name
-    public static final String TABLE_SHOP = "shoppingList";
-    public static final String TABLE_INV = "inventoryList";
-
-    //Table 1
-
-    //Table 2
+    private static final String TABLE_ERRORMESSAGE = "errorMessages";
+    private static final String TABLE_EVENT = "events";
+    private static final String TABLE_EVENT_RECIPE = "eventRecipes";
+    private static final String TABLE_INVENTORY = "inventories";
+    private static final String TABLE_PICTURELINK = "picturelinks";
+    private static final String TABLE_RECIPE = "recipes";
+    private static final String TABLE_RECIPEINVETORY = "recipeInventories";
+    private static final String TABLE_UNITMEASURE = "unitMeasures";
 
     //Common column name
-    public static final String ID_COLUMN = "id";
-    public static final String ITEM_COLUMN = "item";
+    private static final String KEY_ID = "id";
+    private static final String KEY_QUANTITY = "quantity";
+    private static final String KEY_SERVING = "serving";
+    private static final String KEY_PICTURE_ID = "picture_id";
+    private static final String KEY_RECIPE_ID = "recipe_id";
+
+    //ErrorMessage table - column names
+    //id column - defined common
+    private static final String KEY_MESSAGE = "error_message";
+
+    //Event table - column names
+    //id column - defined common
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_DATE = "date";
+    //serving column - defined common
+    //picture_id column - defined common
+
+    //Event Recipe table - column names
+    //id column - defined common
+    private static final String KEY_EVENT_ID = "event_id";
+    //recipe_id column - defined common
+
+    //Inventory table - column names
+    //id column - defined common
+    private static final String KEY_UNIT_ID = "unit_id";
+    //quantity column - defined common
+
+    //Picture link table - column names
+    //id column - defined common
+    private static final String KEY_LINK = "picture_link";
+
+    //Recipe table - column names
+    //id column - defined common
+    private static final String KEY_NAME = "name";
+    private static final String KEY_PROCEDURE = "procedure";
+    //serving column - defined common
+    //picture_id column - defined common
+
+    //Recipe Inventory table - column names
+    //recipe_id column - defined common
+    private static final String KEY_INVENTORY_ID = "inventory_id";
+    //quantity column - defined common
+
+    //Unit Measure table - column names
+    //id column - defined common
+    private static final String KEY_METRIC = "metric";
 
     //Table create statements
-    //Shopping list table
-    private static final String CREATE_TABLE_SHOP = String.format(
-            "CREATE TABLE %s (" + " %s integer primary key autoincrement, " +
-                    " %s text)",
-            TABLE_SHOP,ID_COLUMN,ITEM_COLUMN);
+    //ErrorMessage table create statement
+    private static final String CREATE_TABLE_ERRORMESSAGE = "CREATE TABLE"
+            + TABLE_ERRORMESSAGE
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_MESSAGE + " TEXT"
+            + ")";
 
-    //Inventory list table
-    private static final String CREATE_TABLE_INV = String.format(
-            "CREATE TABLE %s (" + " %s integer primary key autoincrement, " +
-                    " %s text)",
-            TABLE_INV,ID_COLUMN,ITEM_COLUMN);
+    //Event table create statement
+    private static final String CREATE_TABLE_EVENT = "CREATE TABLE"
+            + TABLE_EVENT
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_TITLE + " TEXT,"
+            + KEY_DATE + " DATETIME,"
+            + KEY_SERVING + " INTEGER,"
+            + KEY_PICTURE_ID + " INTEGER"
+            + ")";
+
+    //Event Recipe table create statement
+    private static final String CREATE_TABLE_EVENTRECIPE = "CREATE TABLE"
+            + TABLE_EVENT_RECIPE
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_EVENT_ID + " INTEGER,"
+            + KEY_RECIPE_ID + " INTEGER"
+            + ")";
+
+    //Inventory table create statement
+    private static final String CREATE_TABLE_INVENTORY = "CREATE TABLE"
+            + TABLE_INVENTORY
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_UNIT_ID + " INTEGER,"
+            + KEY_QUANTITY + " INTEGER"
+            + ")";
+
+    //Picture link table create statement
+    private static final String CREATE_TABLE_PICTURELINK = "CREATE TABLE"
+            + TABLE_PICTURELINK
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_LINK + " TEXT"
+            + ")";
+
+    //Recipe table create statement
+    private static final String CREATE_TABLE_RECIPE = "CREATE TABLE"
+            + TABLE_RECIPE
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_NAME + " TEXT,"
+            + KEY_PROCEDURE + " TEXT,"
+            + KEY_SERVING + " INTEGER,"
+            + KEY_PICTURE_ID + " INTEGER"
+            + ")";
+
+    //Recipe Inventory table create statement
+    private static final String CREATE_TABLE_RECIPEINVENTORY = "CREATE TABLE"
+            + TABLE_RECIPEINVETORY
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_RECIPE_ID + " INTEGER,"
+            + KEY_INVENTORY_ID + " INTEGER,"
+            + KEY_QUANTITY + " INTEGER"
+            + ")";
+
+    //Unit measure create statement
+    private static final String CREATE_TABLE_UNITMEASURE = "CREATE TABLE"
+            + TABLE_UNITMEASURE
+            + "("
+            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_NAME + " TEXT"
+            + ")";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -47,14 +158,30 @@ public class DBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE_SHOP);
-        db.execSQL(CREATE_TABLE_INV);
+        //creating required database
+        db.execSQL(CREATE_TABLE_ERRORMESSAGE);
+        db.execSQL(CREATE_TABLE_EVENT);
+        db.execSQL(CREATE_TABLE_EVENTRECIPE);
+        db.execSQL(CREATE_TABLE_INVENTORY);
+        db.execSQL(CREATE_TABLE_PICTURELINK);
+        db.execSQL(CREATE_TABLE_RECIPE);
+        db.execSQL(CREATE_TABLE_RECIPEINVENTORY);
+        db.execSQL(CREATE_TABLE_UNITMEASURE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_SHOP);
-        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_INV);
+        //on upgrade drop older tables
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_ERRORMESSAGE);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT_RECIPE);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_INVENTORY);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_PICTURELINK);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPE);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPEINVETORY);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_UNITMEASURE);
+
+        //create new tables
         onCreate(db);
     }
 

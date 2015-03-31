@@ -7,15 +7,15 @@ public class UnitMeasure {
 
     //private variables
     private int id;
-    private String name;
+    private String metric;
 
     //constructor
     public UnitMeasure(){
     }
 
-    public UnitMeasure(int id, String name){
+    public UnitMeasure(int id, String metric){
         this.id = id;
-        this.name = name;
+        this.metric = metric;
     }
 
     //setters
@@ -23,8 +23,8 @@ public class UnitMeasure {
         this.id = id;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setName(String metric){
+        this.metric = metric;
     }
 
     //getters
@@ -32,8 +32,8 @@ public class UnitMeasure {
         return this.id;
     }
 
-    public String getName(){
-        return this.name;
+    public String getMetric(){
+        return this.metric;
     }
 
 }
