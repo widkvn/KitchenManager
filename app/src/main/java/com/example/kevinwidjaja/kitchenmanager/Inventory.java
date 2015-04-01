@@ -7,6 +7,7 @@ public class Inventory {
 
     //private variables
     private int id;
+    private String name;
     private int unit_id;
     private int quantity;
 
@@ -14,7 +15,7 @@ public class Inventory {
     public Inventory(){
     }
 
-    public Inventory(int id, int unit_id, int quantity){
+    public Inventory(int id, String name, int unit_id, int quantity){
         this.id = id;
         this.unit_id = unit_id;
         this.quantity = quantity;
@@ -23,6 +24,10 @@ public class Inventory {
     //setters
     public void setId(int id){
         this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setUnit_id(int unit_id){
@@ -36,6 +41,10 @@ public class Inventory {
     //getters
     public int getId(){
         return this.id;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public int getUnit_id(){
