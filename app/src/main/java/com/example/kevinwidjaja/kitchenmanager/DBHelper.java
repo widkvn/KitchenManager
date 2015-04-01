@@ -86,7 +86,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
     //Table create statements
     //ErrorMessage table create statement
-    private static final String CREATE_TABLE_ERRORMESSAGE = "CREATE TABLE"
+    private static final String CREATE_TABLE_ERRORMESSAGE = "CREATE TABLE "
             + TABLE_ERRORMESSAGE
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -94,7 +94,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + ")";
 
     //Event table create statement
-    private static final String CREATE_TABLE_EVENT = "CREATE TABLE"
+    private static final String CREATE_TABLE_EVENT = "CREATE TABLE "
             + TABLE_EVENT
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -105,7 +105,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + ")";
 
     //Event Recipe table create statement
-    private static final String CREATE_TABLE_EVENTRECIPE = "CREATE TABLE"
+    private static final String CREATE_TABLE_EVENTRECIPE = "CREATE TABLE "
             + TABLE_EVENT_RECIPE
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -114,7 +114,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + ")";
 
     //Inventory table create statement
-    private static final String CREATE_TABLE_INVENTORY = "CREATE TABLE"
+    private static final String CREATE_TABLE_INVENTORY = "CREATE TABLE "
             + TABLE_INVENTORY
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -124,7 +124,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + ")";
 
     //Picture link table create statement
-    private static final String CREATE_TABLE_PICTURELINK = "CREATE TABLE"
+    private static final String CREATE_TABLE_PICTURELINK = "CREATE TABLE "
             + TABLE_PICTURELINK
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -132,7 +132,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + ")";
 
     //Recipe table create statement
-    private static final String CREATE_TABLE_RECIPE = "CREATE TABLE"
+    private static final String CREATE_TABLE_RECIPE = "CREATE TABLE "
             + TABLE_RECIPE
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -143,7 +143,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + ")";
 
     //Recipe Inventory table create statement
-    private static final String CREATE_TABLE_RECIPEINVENTORY = "CREATE TABLE"
+    private static final String CREATE_TABLE_RECIPEINVENTORY = "CREATE TABLE "
             + TABLE_RECIPEINVETORY
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -153,7 +153,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + ")";
 
     //Unit measure create statement
-    private static final String CREATE_TABLE_UNITMEASURE = "CREATE TABLE"
+    private static final String CREATE_TABLE_UNITMEASURE = "CREATE TABLE "
             + TABLE_UNITMEASURE
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
