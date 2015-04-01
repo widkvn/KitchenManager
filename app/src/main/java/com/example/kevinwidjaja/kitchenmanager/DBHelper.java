@@ -210,7 +210,7 @@ public class DBHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, inventory.getId());
+        //values.put(KEY_ID, inventory.getId()); //can't do this since it's going to be autoincrement
         values.put(KEY_NAME, inventory.getName());
         values.put(KEY_UNIT_ID, inventory.getUnit_id());
         values.put(KEY_QUANTITY, inventory.getQuantity());
