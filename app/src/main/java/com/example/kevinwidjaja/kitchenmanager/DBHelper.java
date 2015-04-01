@@ -89,7 +89,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_ERRORMESSAGE = "CREATE TABLE "
             + TABLE_ERRORMESSAGE
             + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_MESSAGE + " TEXT"
             + ")";
 
@@ -97,7 +97,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_EVENT = "CREATE TABLE "
             + TABLE_EVENT
             + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_TITLE + " TEXT,"
             + KEY_DATE + " DATETIME,"
             + KEY_SERVING + " INTEGER,"
@@ -108,7 +108,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_EVENTRECIPE = "CREATE TABLE "
             + TABLE_EVENT_RECIPE
             + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_EVENT_ID + " INTEGER,"
             + KEY_RECIPE_ID + " INTEGER"
             + ")";
@@ -117,7 +117,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_INVENTORY = "CREATE TABLE "
             + TABLE_INVENTORY
             + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_NAME + " TEXT,"
             + KEY_UNIT_ID + " INTEGER,"
             + KEY_QUANTITY + " INTEGER"
@@ -127,7 +127,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_PICTURELINK = "CREATE TABLE "
             + TABLE_PICTURELINK
             + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_LINK + " TEXT"
             + ")";
 
@@ -135,7 +135,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_RECIPE = "CREATE TABLE "
             + TABLE_RECIPE
             + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_NAME + " TEXT,"
             + KEY_PROCEDURE + " TEXT,"
             + KEY_SERVING + " INTEGER,"
@@ -146,7 +146,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_RECIPEINVENTORY = "CREATE TABLE "
             + TABLE_RECIPEINVETORY
             + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_RECIPE_ID + " INTEGER,"
             + KEY_INVENTORY_ID + " INTEGER,"
             + KEY_QUANTITY + " INTEGER"
@@ -156,7 +156,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_UNITMEASURE = "CREATE TABLE "
             + TABLE_UNITMEASURE
             + "("
-            + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + KEY_NAME + " TEXT"
             + ")";
 
