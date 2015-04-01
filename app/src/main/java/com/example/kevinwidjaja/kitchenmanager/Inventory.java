@@ -62,4 +62,9 @@ public class Inventory {
         return this.quantity;
     }
 
+    //Print
+    public String toString(){
+        return this.getId() + "," + this.getName() + "," + this.getUnit_id() + "," + this.getQuantity();
+    }
+
 }

@@ -36,12 +36,27 @@ public class DBTesting extends AndroidTestCase{
             Log.d("Inventory Name", inventory.getName());
         }
 
+        Log.d("Get Inventories", "Get each Inventory");
+        Log.d("id 1 name", db.getInventory(1).getName());
+        Log.d("id 2 name", db.getInventory(2).getName());
+        Log.d("id 3 name", db.getInventory(3).getName());
+
+        Log.d("Update Inventory", "Update id 3");
+        inv3.setId((int)inv3_id);
+        inv3.setName("Melon");
+        inv3.setUnit_id(1);
+        inv3.setQuantity(10);
+        Log.d("Inventory 3 var", inv3.toString());
+        db.updateInventory(inv3);
+        Log.d("Updated id 3", db.getInventory(3).toString());
+
+        Log.d("Delete Inventories", "Delete All Inventory");
         //deleting inventory
         db.deleteInventory(inv1_id);
         db.deleteInventory(inv2_id);
         db.deleteInventory(inv3_id);
 
-        Log.d("Inventory Count", "Inventory Count: " + db.getAllInventories().size());
+        Log.d("Inventory Count", "Inventory Count after delete: " + db.getAllInventories().size());
 
         //close database
         db.close();
