@@ -303,4 +303,98 @@ public class DBHelper extends SQLiteOpenHelper{
                 KEY_ID + " = ?",
                 new String[] {String.valueOf(inventory_id)});
     }
+
+    // ------------------- Unit Measure table methods
+    /**
+     * creating an unitMeasure
+     */
+    public long createUnitMeasure(UnitMeasure unitMeasure){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_METRIC, unitMeasure.getMetric());
+
+        //insert row
+        long unitMeasure_id = db.insert(TABLE_UNITMEASURE, null, values);
+        return unitMeasure_id;
+    }
+
+    /**
+     * Fetching an unitMeasure
+     */
+    public UnitMeasure getUnitMeasure(long unitMeasure_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM "
+                + TABLE_UNITMEASURE + " WHERE "
+                + KEY_ID + " = "
+                + unitMeasure_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null)
+            c.moveToFirst();
+
+        UnitMeasure unitMeasure = new UnitMeasure();
+        unitMeasure.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        unitMeasure.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+
+        return unitMeasure;
+    }
+
+    /**
+     * Fetching all unitMeasure
+     */
+    public List<UnitMeasure> getAllunitMeasure(){
+        List<UnitMeasure> unitMeasures = new ArrayList<UnitMeasure>();
+        String selectQuery = "SELECT * FROM "
+                + TABLE_UNITMEASURE;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if(c.moveToFirst()) {
+            do {
+                UnitMeasure unitMeasure = new UnitMeasure();
+                unitMeasure.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                unitMeasure.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+
+                // adding to inventory list
+                unitMeasures.add(unitMeasure);
+            } while(c.moveToNext());
+        }
+        return unitMeasures;
+    }
+
+    /**
+     * Update an unitMeasure
+     */
+    public int updateUnitMeasure(UnitMeasure unitMeasure){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_METRIC, unitMeasure.getMetric());
+
+        //updating row
+        return db.update(TABLE_UNITMEASURE, values,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(unitMeasure.getId())});
+
+    }
+
+    /**
+     * Delete an unitMeasure
+     */
+    public void deleteUnitMeasure(long unitMeasure_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_UNITMEASURE,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(unitMeasure_id)});
+    }
+
 }
