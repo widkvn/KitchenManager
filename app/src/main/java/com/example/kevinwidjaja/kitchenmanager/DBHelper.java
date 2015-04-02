@@ -29,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String TABLE_EVENT = "events";
     private static final String TABLE_EVENT_RECIPE = "eventRecipes";
     private static final String TABLE_INVENTORY = "inventories";
-    private static final String TABLE_PICTURELINK = "picturelinks";
+    private static final String TABLE_PICTURELINK = "pictureLinks";
     private static final String TABLE_RECIPE = "recipes";
     private static final String TABLE_RECIPEINVETORY = "recipeInventories";
     private static final String TABLE_UNITMEASURE = "unitMeasures";
@@ -157,7 +157,7 @@ public class DBHelper extends SQLiteOpenHelper{
             + TABLE_UNITMEASURE
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_NAME + " TEXT"
+            + KEY_METRIC + " TEXT"
             + ")";
 
     public DBHelper(Context context) {
@@ -167,26 +167,26 @@ public class DBHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         //creating required database
-        db.execSQL(CREATE_TABLE_ERRORMESSAGE);
-        db.execSQL(CREATE_TABLE_EVENT);
-        db.execSQL(CREATE_TABLE_EVENTRECIPE);
+        //db.execSQL(CREATE_TABLE_ERRORMESSAGE);
+        //db.execSQL(CREATE_TABLE_EVENT);
+        //db.execSQL(CREATE_TABLE_EVENTRECIPE);
         db.execSQL(CREATE_TABLE_INVENTORY);
-        db.execSQL(CREATE_TABLE_PICTURELINK);
-        db.execSQL(CREATE_TABLE_RECIPE);
-        db.execSQL(CREATE_TABLE_RECIPEINVENTORY);
+        //db.execSQL(CREATE_TABLE_PICTURELINK);
+        //db.execSQL(CREATE_TABLE_RECIPE);
+        //db.execSQL(CREATE_TABLE_RECIPEINVENTORY);
         db.execSQL(CREATE_TABLE_UNITMEASURE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //on upgrade drop older tables
-        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_ERRORMESSAGE);
-        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT);
-        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT_RECIPE);
+        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_ERRORMESSAGE);
+        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT);
+        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT_RECIPE);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_INVENTORY);
-        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_PICTURELINK);
-        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPE);
-        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPEINVETORY);
+        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_PICTURELINK);
+        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPE);
+        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPEINVETORY);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_UNITMEASURE);
 
         //create new tables
@@ -339,7 +339,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
         UnitMeasure unitMeasure = new UnitMeasure();
         unitMeasure.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        unitMeasure.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+        unitMeasure.setMetric(c.getString(c.getColumnIndex(KEY_METRIC)));
 
         return unitMeasure;
     }
@@ -347,7 +347,7 @@ public class DBHelper extends SQLiteOpenHelper{
     /**
      * Fetching all unitMeasure
      */
-    public List<UnitMeasure> getAllunitMeasure(){
+    public List<UnitMeasure> getAllUnitMeasure(){
         List<UnitMeasure> unitMeasures = new ArrayList<UnitMeasure>();
         String selectQuery = "SELECT * FROM "
                 + TABLE_UNITMEASURE;
@@ -362,7 +362,7 @@ public class DBHelper extends SQLiteOpenHelper{
             do {
                 UnitMeasure unitMeasure = new UnitMeasure();
                 unitMeasure.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                unitMeasure.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+                unitMeasure.setMetric(c.getString(c.getColumnIndex(KEY_METRIC)));
 
                 // adding to inventory list
                 unitMeasures.add(unitMeasure);

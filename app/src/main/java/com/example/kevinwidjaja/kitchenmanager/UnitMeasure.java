@@ -13,6 +13,10 @@ public class UnitMeasure {
     public UnitMeasure(){
     }
 
+    public UnitMeasure(String metric){
+        this.metric = metric;
+    }
+
     public UnitMeasure(int id, String metric){
         this.id = id;
         this.metric = metric;
@@ -23,7 +27,7 @@ public class UnitMeasure {
         this.id = id;
     }
 
-    public void setName(String metric){
+    public void setMetric(String metric){
         this.metric = metric;
     }
 
@@ -34,6 +38,11 @@ public class UnitMeasure {
 
     public String getMetric(){
         return this.metric;
+    }
+
+    //Print
+    public String toString(){
+        return this.getId() + "," + this.getMetric();
     }
 
 }
