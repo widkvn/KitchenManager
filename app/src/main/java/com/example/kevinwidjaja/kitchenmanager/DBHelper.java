@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Picture;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -171,7 +172,7 @@ public class DBHelper extends SQLiteOpenHelper{
         //db.execSQL(CREATE_TABLE_EVENT);
         //db.execSQL(CREATE_TABLE_EVENTRECIPE);
         db.execSQL(CREATE_TABLE_INVENTORY);
-        //db.execSQL(CREATE_TABLE_PICTURELINK);
+        db.execSQL(CREATE_TABLE_PICTURELINK);
         //db.execSQL(CREATE_TABLE_RECIPE);
         //db.execSQL(CREATE_TABLE_RECIPEINVENTORY);
         db.execSQL(CREATE_TABLE_UNITMEASURE);
@@ -184,7 +185,7 @@ public class DBHelper extends SQLiteOpenHelper{
         //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT);
         //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT_RECIPE);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_INVENTORY);
-        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_PICTURELINK);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_PICTURELINK);
         //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPE);
         //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPEINVETORY);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_UNITMEASURE);
@@ -397,9 +398,9 @@ public class DBHelper extends SQLiteOpenHelper{
                 new String[] {String.valueOf(unitMeasure_id)});
     }
 
-    // ------------------- Unit Measure table methods
+    // ------------------- Error Message table methods
     /**
-     * creating an unitMeasure
+     * creating an errorMessage
      */
     public long createErrorMessage(ErrorMessage errorMessage){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -413,7 +414,7 @@ public class DBHelper extends SQLiteOpenHelper{
     }
 
     /**
-     * Fetching an unitMeasure
+     * Fetching an errorMessage
      */
     public ErrorMessage getErrorMessage(long errorMessage_id){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -438,7 +439,7 @@ public class DBHelper extends SQLiteOpenHelper{
     }
 
     /**
-     * Fetching all unitMeasure
+     * Fetching all errorMessage
      */
     public List<ErrorMessage> getAllErrorMessage(){
         List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
@@ -465,7 +466,7 @@ public class DBHelper extends SQLiteOpenHelper{
     }
 
     /**
-     * Update an unitMeasure
+     * Update an errorMessage
      */
     public int updateErrorMessage(ErrorMessage errorMessage){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -481,13 +482,106 @@ public class DBHelper extends SQLiteOpenHelper{
     }
 
     /**
-     * Delete an unitMeasure
+     * Delete an errorMessage
      */
     public void deleteErrorMessage(long errorMessage_id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_ERRORMESSAGE,
                 KEY_ID + " = ?",
                 new String[] {String.valueOf(errorMessage_id)});
+    }
+
+    // ------------------- Picture Link table methods
+    /**
+     * creating an pictureLink
+     */
+    public long createPictureLink(PictureLink pictureLink){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_LINK, pictureLink.getLink());
+
+        //insert row
+        long pictureLink_id = db.insert(TABLE_PICTURELINK, null, values);
+        return pictureLink_id;
+    }
+
+    /**
+     * Fetching an pictureLink
+     */
+    public PictureLink getPictureLink(long pictureLink_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM "
+                + TABLE_PICTURELINK + " WHERE "
+                + KEY_ID + " = "
+                + pictureLink_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null)
+            c.moveToFirst();
+
+        PictureLink pictureLink = new PictureLink();
+        pictureLink.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        pictureLink.setLink(c.getString(c.getColumnIndex(KEY_LINK)));
+
+        return pictureLink;
+    }
+
+    /**
+     * Fetching all pictureLink
+     */
+    public List<PictureLink> getAllPictureLink(){
+        List<PictureLink> pictureLinks = new ArrayList<PictureLink>();
+        String selectQuery = "SELECT * FROM "
+                + TABLE_PICTURELINK;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if(c.moveToFirst()) {
+            do {
+                PictureLink pictureLink = new PictureLink();
+                pictureLink.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                pictureLink.setLink(c.getString(c.getColumnIndex(KEY_LINK)));
+
+                // adding to inventory list
+                pictureLinks.add(pictureLink);
+            } while(c.moveToNext());
+        }
+        return pictureLinks;
+    }
+
+    /**
+     * Update an pictureLink
+     */
+    public int updatePictureLink(PictureLink pictureLink){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_LINK, pictureLink.getLink());
+
+        //updating row
+        return db.update(TABLE_PICTURELINK, values,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(pictureLink.getId())});
+
+    }
+
+    /**
+     * Delete an pictureLink
+     */
+    public void deletePictureLink(long pictureLink_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PICTURELINK,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(pictureLink_id)});
     }
 
 }

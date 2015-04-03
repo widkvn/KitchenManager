@@ -1,5 +1,7 @@
 package com.example.kevinwidjaja.kitchenmanager;
 
+import android.graphics.Picture;
+
 /** Picture link Model class
  * Created by kevinwidjaja on 3/30/15.
  */
@@ -11,6 +13,10 @@ public class PictureLink {
 
     //constructor
     public PictureLink(){
+    }
+
+    public PictureLink(String link){
+        this.link = link;
     }
 
     public PictureLink(int id, String link){
@@ -34,6 +40,11 @@ public class PictureLink {
 
     public String getLink(){
         return this.link;
+    }
+
+    //Print
+    public String toString(){
+        return this.getId() + "," + this.getLink();
     }
 
 }
