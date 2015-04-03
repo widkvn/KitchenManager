@@ -13,6 +13,10 @@ public class ErrorMessage {
     public ErrorMessage(){
     }
 
+    public ErrorMessage(String msg){
+        this.msg = msg;
+    }
+
     public ErrorMessage(int id, String msg){
         this.id = id;
         this.msg = msg;
@@ -34,6 +38,11 @@ public class ErrorMessage {
 
     public String getMsg(){
         return this.msg;
+    }
+
+    //Print
+    public String toString(){
+        return this.getId() + "," + this.getMsg();
     }
 
 }

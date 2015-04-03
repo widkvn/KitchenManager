@@ -167,7 +167,7 @@ public class DBHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         //creating required database
-        //db.execSQL(CREATE_TABLE_ERRORMESSAGE);
+        db.execSQL(CREATE_TABLE_ERRORMESSAGE);
         //db.execSQL(CREATE_TABLE_EVENT);
         //db.execSQL(CREATE_TABLE_EVENTRECIPE);
         db.execSQL(CREATE_TABLE_INVENTORY);
@@ -180,7 +180,7 @@ public class DBHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //on upgrade drop older tables
-        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_ERRORMESSAGE);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_ERRORMESSAGE);
         //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT);
         //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT_RECIPE);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_INVENTORY);
@@ -395,6 +395,99 @@ public class DBHelper extends SQLiteOpenHelper{
         db.delete(TABLE_UNITMEASURE,
                 KEY_ID + " = ?",
                 new String[] {String.valueOf(unitMeasure_id)});
+    }
+
+    // ------------------- Unit Measure table methods
+    /**
+     * creating an unitMeasure
+     */
+    public long createErrorMessage(ErrorMessage errorMessage){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_MESSAGE, errorMessage.getMsg());
+
+        //insert row
+        long errorMessage_id = db.insert(TABLE_ERRORMESSAGE, null, values);
+        return errorMessage_id;
+    }
+
+    /**
+     * Fetching an unitMeasure
+     */
+    public ErrorMessage getErrorMessage(long errorMessage_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM "
+                + TABLE_ERRORMESSAGE + " WHERE "
+                + KEY_ID + " = "
+                + errorMessage_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null)
+            c.moveToFirst();
+
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        errorMessage.setMsg(c.getString(c.getColumnIndex(KEY_MESSAGE)));
+
+        return errorMessage;
+    }
+
+    /**
+     * Fetching all unitMeasure
+     */
+    public List<ErrorMessage> getAllErrorMessage(){
+        List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
+        String selectQuery = "SELECT * FROM "
+                + TABLE_ERRORMESSAGE;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if(c.moveToFirst()) {
+            do {
+                ErrorMessage errorMessage = new ErrorMessage();
+                errorMessage.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                errorMessage.setMsg(c.getString(c.getColumnIndex(KEY_MESSAGE)));
+
+                // adding to inventory list
+                errorMessages.add(errorMessage);
+            } while(c.moveToNext());
+        }
+        return errorMessages;
+    }
+
+    /**
+     * Update an unitMeasure
+     */
+    public int updateErrorMessage(ErrorMessage errorMessage){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_MESSAGE, errorMessage.getMsg());
+
+        //updating row
+        return db.update(TABLE_ERRORMESSAGE, values,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(errorMessage.getId())});
+
+    }
+
+    /**
+     * Delete an unitMeasure
+     */
+    public void deleteErrorMessage(long errorMessage_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_ERRORMESSAGE,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(errorMessage_id)});
     }
 
 }
