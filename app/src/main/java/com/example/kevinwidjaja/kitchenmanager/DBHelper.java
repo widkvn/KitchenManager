@@ -8,9 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Picture;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /** Database Helper class for initialization
  * Created by kevinwidjaja on 3/30/15.
@@ -170,7 +172,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         //creating required database
         db.execSQL(CREATE_TABLE_ERRORMESSAGE);
-        //db.execSQL(CREATE_TABLE_EVENT);
+        db.execSQL(CREATE_TABLE_EVENT);
         db.execSQL(CREATE_TABLE_EVENTRECIPE);
         db.execSQL(CREATE_TABLE_INVENTORY);
         db.execSQL(CREATE_TABLE_PICTURELINK);
@@ -183,7 +185,7 @@ public class DBHelper extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //on upgrade drop older tables
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_ERRORMESSAGE);
-        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENTRECIPE);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_INVENTORY);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_PICTURELINK);
@@ -992,5 +994,6 @@ public class DBHelper extends SQLiteOpenHelper{
                 KEY_ID + " = ?",
                 new String[] {String.valueOf(recipeInventory_id)});
     }
+
 
 }
