@@ -50,7 +50,7 @@ public class EventRecipeTest extends AndroidTestCase{
         Log.d("Updated id 3", db.getEventRecipe(3).toString());
 
         Log.d("Delete EventRecipe", "Delete All EventRecipe");
-        //deleting inventory
+        //deleting EventRecipe
         db.deleteEventRecipe(eventRecipe1_id);
         db.deleteEventRecipe(eventRecipe2_id);
         db.deleteEventRecipe(eventRecipe3_id);

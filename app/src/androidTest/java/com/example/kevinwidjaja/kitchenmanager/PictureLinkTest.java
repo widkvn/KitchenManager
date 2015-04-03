@@ -49,7 +49,7 @@ public class PictureLinkTest extends AndroidTestCase{
         Log.d("Updated id 3", db.getPictureLink(3).toString());
 
         Log.d("Delete PictureLink", "Delete All PictureLink");
-        //deleting inventory
+        //deleting PictureLink
         db.deletePictureLink(pictureLink1_id);
         db.deletePictureLink(pictureLink2_id);
         db.deletePictureLink(pictureLink3_id);

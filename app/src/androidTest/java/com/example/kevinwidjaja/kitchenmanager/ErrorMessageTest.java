@@ -49,7 +49,7 @@ public class ErrorMessageTest extends AndroidTestCase {
         Log.d("Updated id 3", db.getErrorMessage(3).toString());
 
         Log.d("Delete ErrorMessage", "Delete All ErrorMessage");
-        //deleting inventory
+        //deleting ErrorMessage
         db.deleteErrorMessage(errorMessage1_id);
         db.deleteErrorMessage(errorMessage2_id);
         db.deleteErrorMessage(errorMessage3_id);

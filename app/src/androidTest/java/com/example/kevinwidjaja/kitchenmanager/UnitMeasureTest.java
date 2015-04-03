@@ -49,7 +49,7 @@ public class UnitMeasureTest extends AndroidTestCase{
         Log.d("Updated id 3", db.getUnitMeasure(3).toString());
 
         Log.d("Delete UnitMeasures", "Delete All UnitMeasure");
-        //deleting inventory
+        //deleting unitMeasure
         db.deleteUnitMeasure(unitMeasure1_id);
         db.deleteUnitMeasure(unitMeasure2_id);
         db.deleteUnitMeasure(unitMeasure3_id);
