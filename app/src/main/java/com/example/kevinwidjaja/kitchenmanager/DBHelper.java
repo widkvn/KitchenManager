@@ -175,7 +175,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_TABLE_INVENTORY);
         db.execSQL(CREATE_TABLE_PICTURELINK);
         db.execSQL(CREATE_TABLE_RECIPE);
-        //db.execSQL(CREATE_TABLE_RECIPEINVENTORY);
+        db.execSQL(CREATE_TABLE_RECIPEINVENTORY);
         db.execSQL(CREATE_TABLE_UNITMEASURE);
     }
 
@@ -188,7 +188,7 @@ public class DBHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_INVENTORY);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_PICTURELINK);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPE);
-        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPEINVETORY);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPEINVETORY);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_UNITMEASURE);
 
         //create new tables
