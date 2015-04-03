@@ -15,6 +15,12 @@ public class RecipeInventory {
     public RecipeInventory(){
     }
 
+    public RecipeInventory(int recipe_id, int inventory_id, int quantity){
+        this.recipe_id = recipe_id;
+        this.inventory_id = inventory_id;
+        this.quantity = quantity;
+    }
+
     public RecipeInventory(int id, int recipe_id, int inventory_id, int quantity){
         this.id = id;
         this.recipe_id = recipe_id;
@@ -54,6 +60,11 @@ public class RecipeInventory {
 
     public int getQuantity(){
         return this.quantity;
+    }
+
+    //Print
+    public String toString(){
+        return this.getId() + "," + this.getRecipe_id() + "," + this.getInventory_id() + "," + this.getQuantity();
     }
 
 }

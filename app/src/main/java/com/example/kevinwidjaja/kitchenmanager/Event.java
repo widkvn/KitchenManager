@@ -18,6 +18,13 @@ public class Event {
     public Event(){
     }
 
+    public Event(String title, Date date, int serving, int picture_id){
+        this.title = title;
+        this.date = date;
+        this.serving = serving;
+        this.picture_id = picture_id;
+    }
+
     public Event(int id, String title, Date date, int serving, int picture_id){
         this.id = id;
         this.title = title;
@@ -66,6 +73,11 @@ public class Event {
 
     public int getPicture_id(){
         return this.picture_id;
+    }
+
+    //Print
+    public String toString(){
+        return this.getId() + "," + this.getTitle() + "," + this.getDate() + "," + this.getServing() + "," + this.getPicture_id();
     }
 
 }

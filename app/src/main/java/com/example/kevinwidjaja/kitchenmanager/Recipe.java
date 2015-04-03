@@ -16,6 +16,13 @@ public class Recipe {
     public Recipe(){
     }
 
+    public Recipe(String name, String procedure, int serving, int picture_id){
+        this.name = name;
+        this.procedure = procedure;
+        this.serving = serving;
+        this.picture_id = picture_id;
+    }
+
     public Recipe(int id, String name, String procedure, int serving, int picture_id){
         this.id = id;
         this.name = name;
@@ -64,6 +71,11 @@ public class Recipe {
 
     public int getPicture_id(){
         return this.picture_id;
+    }
+
+    //Print
+    public String toString(){
+        return this.getId() + "," + this.getName() + "," + this.getProcedure() + "," + this.getServing() + "," + this.getPicture_id();
     }
 
 }

@@ -9,6 +9,7 @@ import android.graphics.Picture;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /** Database Helper class for initialization
@@ -28,7 +29,7 @@ public class DBHelper extends SQLiteOpenHelper{
     //Table name
     private static final String TABLE_ERRORMESSAGE = "errorMessages";
     private static final String TABLE_EVENT = "events";
-    private static final String TABLE_EVENT_RECIPE = "eventRecipes";
+    private static final String TABLE_EVENTRECIPE = "eventRecipes";
     private static final String TABLE_INVENTORY = "inventories";
     private static final String TABLE_PICTURELINK = "pictureLinks";
     private static final String TABLE_RECIPE = "recipes";
@@ -107,7 +108,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
     //Event Recipe table create statement
     private static final String CREATE_TABLE_EVENTRECIPE = "CREATE TABLE "
-            + TABLE_EVENT_RECIPE
+            + TABLE_EVENTRECIPE
             + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_EVENT_ID + " INTEGER,"
@@ -270,7 +271,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 inventory.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
                 inventory.setUnit_id(c.getInt(c.getColumnIndex(KEY_UNIT_ID)));
 
-                // adding to inventory list
+                // adding to inventories
                 inventories.add(inventory);
             } while(c.moveToNext());
         }
@@ -365,7 +366,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 unitMeasure.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 unitMeasure.setMetric(c.getString(c.getColumnIndex(KEY_METRIC)));
 
-                // adding to inventory list
+                // adding to unitMeasures
                 unitMeasures.add(unitMeasure);
             } while(c.moveToNext());
         }
@@ -458,7 +459,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 errorMessage.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 errorMessage.setMsg(c.getString(c.getColumnIndex(KEY_MESSAGE)));
 
-                // adding to inventory list
+                // adding to errorMessages
                 errorMessages.add(errorMessage);
             } while(c.moveToNext());
         }
@@ -551,7 +552,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 pictureLink.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 pictureLink.setLink(c.getString(c.getColumnIndex(KEY_LINK)));
 
-                // adding to inventory list
+                // adding to pictureLinks
                 pictureLinks.add(pictureLink);
             } while(c.moveToNext());
         }
@@ -582,6 +583,414 @@ public class DBHelper extends SQLiteOpenHelper{
         db.delete(TABLE_PICTURELINK,
                 KEY_ID + " = ?",
                 new String[] {String.valueOf(pictureLink_id)});
+    }
+
+    // ------------------- Event Recipe table methods
+    /**
+     * creating an eventRecipe
+     */
+    public long createEventRecipe(EventRecipe eventRecipe){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_EVENT_ID, eventRecipe.getEvent_id());
+        values.put(KEY_RECIPE_ID, eventRecipe.getRecipe_id());
+
+        //insert row
+        long eventRecipe_id = db.insert(TABLE_EVENTRECIPE, null, values);
+        return eventRecipe_id;
+    }
+
+    /**
+     * Fetching an eventRecipe
+     */
+    public EventRecipe getEventRecipe(long eventRecipe_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM "
+                + TABLE_EVENTRECIPE + " WHERE "
+                + KEY_ID + " = "
+                + eventRecipe_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null)
+            c.moveToFirst();
+
+        EventRecipe eventRecipe = new EventRecipe();
+        eventRecipe.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        eventRecipe.setEvent_id(c.getInt(c.getColumnIndex(KEY_EVENT_ID)));
+        eventRecipe.setRecipe_id(c.getInt(c.getColumnIndex(KEY_RECIPE_ID)));
+
+        return eventRecipe;
+    }
+
+    /**
+     * Fetching all eventRecipe
+     */
+    public List<EventRecipe> getAllEventRecipe(){
+        List<EventRecipe> eventRecipes = new ArrayList<EventRecipe>();
+        String selectQuery = "SELECT * FROM "
+                + TABLE_EVENTRECIPE;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if(c.moveToFirst()) {
+            do {
+                EventRecipe eventRecipe = new EventRecipe();
+                eventRecipe.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                eventRecipe.setEvent_id(c.getInt(c.getColumnIndex(KEY_EVENT_ID)));
+                eventRecipe.setRecipe_id(c.getInt(c.getColumnIndex(KEY_RECIPE_ID)));
+
+                // adding to eventRecipes
+                eventRecipes.add(eventRecipe);
+            } while(c.moveToNext());
+        }
+        return eventRecipes;
+    }
+
+    /**
+     * Update an eventRecipe
+     */
+    public int updateEventRecipe(EventRecipe eventRecipe){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_EVENT_ID, eventRecipe.getEvent_id());
+        values.put(KEY_RECIPE_ID, eventRecipe.getRecipe_id());
+
+        //updating row
+        return db.update(TABLE_EVENTRECIPE, values,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(eventRecipe.getId())});
+
+    }
+
+    /**
+     * Delete an eventRecipe
+     */
+    public void deleteEventRecipe(long eventRecipe_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_EVENTRECIPE,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(eventRecipe_id)});
+    }
+
+    // ------------------- Event table methods
+    /**
+     * creating an event
+     */
+    public long createEvent(Event event){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_TITLE, event.getTitle());
+        values.put(KEY_DATE, event.getDate().toString());
+        values.put(KEY_SERVING, event.getServing());
+        values.put(KEY_PICTURE_ID, event.getPicture_id());
+
+        //insert row
+        long event_id = db.insert(TABLE_EVENT, null, values);
+        return event_id;
+    }
+
+    /**
+     * Fetching an event
+     */
+    public Event getEvent(long event_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM "
+                + TABLE_EVENT + " WHERE "
+                + KEY_ID + " = "
+                + event_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null)
+            c.moveToFirst();
+
+        Event event = new Event();
+        event.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        event.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
+        event.setDate(new Date(c.getString(c.getColumnIndex(KEY_DATE))));
+        event.setServing(c.getInt(c.getColumnIndex(KEY_SERVING)));
+        event.setPicture_id(c.getInt(c.getColumnIndex(KEY_PICTURE_ID)));
+
+        return event;
+    }
+
+    /**
+     * Fetching all event
+     */
+    public List<Event> getAllEvent(){
+        List<Event> events = new ArrayList<Event>();
+        String selectQuery = "SELECT * FROM "
+                + TABLE_EVENT;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if(c.moveToFirst()) {
+            do {
+                Event event = new Event();
+                event.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                event.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
+                event.setDate(new Date(c.getString(c.getColumnIndex(KEY_DATE))));
+                event.setServing(c.getInt(c.getColumnIndex(KEY_SERVING)));
+                event.setPicture_id(c.getInt(c.getColumnIndex(KEY_PICTURE_ID)));
+
+                // adding to events
+                events.add(event);
+            } while(c.moveToNext());
+        }
+        return events;
+    }
+
+    /**
+     * Update an event
+     */
+    public int updateEvent(Event event){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_TITLE, event.getTitle());
+        values.put(KEY_DATE, event.getDate().toString());
+        values.put(KEY_SERVING, event.getServing());
+        values.put(KEY_PICTURE_ID, event.getPicture_id());
+
+        //updating row
+        return db.update(TABLE_EVENT, values,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(event.getId())});
+
+    }
+
+    /**
+     * Delete an eventRecipe
+     */
+    public void deleteEvent(long event_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_EVENT,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(event_id)});
+    }
+
+    // ------------------- Recipe table methods
+    /**
+     * creating a recipe
+     */
+    public long createRecipe(Recipe recipe){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, recipe.getName());
+        values.put(KEY_PROCEDURE, recipe.getProcedure());
+        values.put(KEY_SERVING, recipe.getServing());
+        values.put(KEY_PICTURE_ID, recipe.getPicture_id());
+
+        //insert row
+        long recipe_id = db.insert(TABLE_RECIPE, null, values);
+        return recipe_id;
+    }
+
+    /**
+     * Fetching a recipe
+     */
+    public Recipe getRecipe(long recipe_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM "
+                + TABLE_RECIPE + " WHERE "
+                + KEY_ID + " = "
+                + recipe_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null)
+            c.moveToFirst();
+
+        Recipe recipe = new Recipe();
+        recipe.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        recipe.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+        recipe.setProcedure(c.getString(c.getColumnIndex(KEY_PROCEDURE)));
+        recipe.setServing(c.getInt(c.getColumnIndex(KEY_SERVING)));
+        recipe.setPicture_id(c.getInt(c.getColumnIndex(KEY_PICTURE_ID)));
+
+        return recipe;
+    }
+
+    /**
+     * Fetching all recipe
+     */
+    public List<Recipe> getAllRecipe(){
+        List<Recipe> recipes = new ArrayList<Recipe>();
+        String selectQuery = "SELECT * FROM "
+                + TABLE_RECIPE;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if(c.moveToFirst()) {
+            do {
+                Recipe recipe = new Recipe();
+                recipe.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                recipe.setName(c.getString(c.getColumnIndex(KEY_NAME)));
+                recipe.setProcedure(c.getString(c.getColumnIndex(KEY_PROCEDURE)));
+                recipe.setServing(c.getInt(c.getColumnIndex(KEY_SERVING)));
+                recipe.setPicture_id(c.getInt(c.getColumnIndex(KEY_PICTURE_ID)));
+
+                // adding to recipes
+                recipes.add(recipe);
+            } while(c.moveToNext());
+        }
+        return recipes;
+    }
+
+    /**
+     * Update a recipe
+     */
+    public int updateRecipe(Recipe recipe){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, recipe.getName());
+        values.put(KEY_PROCEDURE, recipe.getProcedure());
+        values.put(KEY_SERVING, recipe.getServing());
+        values.put(KEY_PICTURE_ID, recipe.getPicture_id());
+
+        //updating row
+        return db.update(TABLE_RECIPE, values,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(recipe.getId())});
+
+    }
+
+    /**
+     * Delete a recipe
+     */
+    public void deleteRecipe(long recipe_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_RECIPE,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(recipe_id)});
+    }
+
+    // ------------------- Recipe Inventory table methods
+    /**
+     * creating a recipeInventory
+     */
+    public long createRecipeInventory(RecipeInventory recipeInventory){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_RECIPE_ID, recipeInventory.getRecipe_id());
+        values.put(KEY_INVENTORY_ID, recipeInventory.getInventory_id());
+        values.put(KEY_QUANTITY, recipeInventory.getQuantity());
+
+        //insert row
+        long recipeInventory_id = db.insert(TABLE_RECIPEINVETORY, null, values);
+        return recipeInventory_id;
+    }
+
+    /**
+     * Fetching a recipeInventory
+     */
+    public RecipeInventory getRecipeInventory(long recipeInventory_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM "
+                + TABLE_RECIPEINVETORY + " WHERE "
+                + KEY_ID + " = "
+                + recipeInventory_id;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null)
+            c.moveToFirst();
+
+        RecipeInventory recipeInventory = new RecipeInventory();
+        recipeInventory.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        recipeInventory.setRecipe_id(c.getInt(c.getColumnIndex(KEY_RECIPE_ID)));
+        recipeInventory.setInventory_id(c.getInt(c.getColumnIndex(KEY_INVENTORY_ID)));
+        recipeInventory.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
+
+        return recipeInventory;
+    }
+
+    /**
+     * Fetching all recipeInventory
+     */
+    public List<RecipeInventory> getAllRecipeInventory(){
+        List<RecipeInventory> recipeInventories = new ArrayList<RecipeInventory>();
+        String selectQuery = "SELECT * FROM "
+                + TABLE_RECIPEINVETORY;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if(c.moveToFirst()) {
+            do {
+                RecipeInventory recipeInventory = new RecipeInventory();
+                recipeInventory.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                recipeInventory.setRecipe_id(c.getInt(c.getColumnIndex(KEY_RECIPE_ID)));
+                recipeInventory.setInventory_id(c.getInt(c.getColumnIndex(KEY_INVENTORY_ID)));
+                recipeInventory.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
+
+                // adding to recipeInventories
+                recipeInventories.add(recipeInventory);
+            } while(c.moveToNext());
+        }
+        return recipeInventories;
+    }
+
+    /**
+     * Update a recipeInventory
+     */
+    public int updateRecipeInventory(RecipeInventory recipeInventory){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_RECIPE_ID, recipeInventory.getRecipe_id());
+        values.put(KEY_INVENTORY_ID, recipeInventory.getInventory_id());
+        values.put(KEY_QUANTITY, recipeInventory.getQuantity());
+
+        //updating row
+        return db.update(TABLE_RECIPEINVETORY, values,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(recipeInventory.getId())});
+
+    }
+
+    /**
+     * Delete a recipeInventory
+     */
+    public void deleteRecipeInventory(long recipeInventory_id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_RECIPEINVETORY,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(recipeInventory_id)});
     }
 
 }

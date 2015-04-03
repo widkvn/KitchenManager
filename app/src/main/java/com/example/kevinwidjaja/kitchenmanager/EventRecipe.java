@@ -14,6 +14,11 @@ public class EventRecipe {
     public EventRecipe(){
     }
 
+    public EventRecipe(int event_id, int recipe_id){
+        this.event_id = event_id;
+        this.recipe_id = recipe_id;
+    }
+
     public EventRecipe(int id, int event_id, int recipe_id){
         this.id = id;
         this.event_id = event_id;
@@ -44,6 +49,11 @@ public class EventRecipe {
 
     public int getRecipe_id(){
         return this.recipe_id;
+    }
+
+    //Print
+    public String toString(){
+        return this.getId() + "," + this.getEvent_id() + "," + this.getRecipe_id();
     }
 
 }
