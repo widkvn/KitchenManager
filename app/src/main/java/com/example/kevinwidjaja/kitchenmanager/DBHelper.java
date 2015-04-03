@@ -171,7 +171,7 @@ public class DBHelper extends SQLiteOpenHelper{
         //creating required database
         db.execSQL(CREATE_TABLE_ERRORMESSAGE);
         //db.execSQL(CREATE_TABLE_EVENT);
-        //db.execSQL(CREATE_TABLE_EVENTRECIPE);
+        db.execSQL(CREATE_TABLE_EVENTRECIPE);
         db.execSQL(CREATE_TABLE_INVENTORY);
         db.execSQL(CREATE_TABLE_PICTURELINK);
         //db.execSQL(CREATE_TABLE_RECIPE);
@@ -184,7 +184,7 @@ public class DBHelper extends SQLiteOpenHelper{
         //on upgrade drop older tables
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_ERRORMESSAGE);
         //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT);
-        //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENT_RECIPE);
+        db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_EVENTRECIPE);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_INVENTORY);
         db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_PICTURELINK);
         //db.execSQL("DROP TABLE IF IT EXISTS " + TABLE_RECIPE);
