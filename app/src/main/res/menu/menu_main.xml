@@ -6,28 +6,27 @@
 
     <item android:id="@+id/home"
         android:title="@string/home"
-        android:icon="@drawable/test" >
-    </item>
+        android:icon="@drawable/homeicon"
+        android:showAsAction="always" />
 
     <item android:id="@+id/inventory"
         android:title="@string/inventory"
-        android:icon="@drawable/test" >
-    </item>
+        android:icon="@drawable/test"
+        android:showAsAction="never" />
 
     <item android:id="@+id/shoppinglist"
         android:title="@string/shopping_list"
-        android:icon="@drawable/test" >
-    </item>
+        android:icon="@drawable/test"
+        android:showAsAction="never" />
 
     <item android:id="@+id/recipe"
         android:title="@string/recipe"
-        android:icon="@drawable/test" >
-    </item>
+        android:icon="@drawable/test"
+        android:showAsAction="never"/>
 
     <item android:id="@+id/event"
         android:title="@string/event"
-        android:icon="@drawable/test" >
-    </item>
-
+        android:icon="@drawable/test"
+        android:showAsAction="never" />
 
 </menu>
