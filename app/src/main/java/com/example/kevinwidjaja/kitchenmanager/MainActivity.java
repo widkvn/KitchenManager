@@ -45,10 +45,6 @@ public class MainActivity extends Activity {
 
         Intent intent;
         switch (item.getItemId()) {
-            case R.id.home:
-                intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                break;
             case R.id.inventory:
                 intent = new Intent(this, InventoryActivity.class);
                 startActivity(intent);

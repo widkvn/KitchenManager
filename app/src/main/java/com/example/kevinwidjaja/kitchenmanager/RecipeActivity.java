@@ -1,6 +1,7 @@
 package com.example.kevinwidjaja.kitchenmanager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,16 +25,34 @@ public class RecipeActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.home:
+                intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.inventory:
+                intent = new Intent(this, InventoryActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.shoppinglist:
+                intent = new Intent(this, ShoppingListActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.recipe:
+                intent = new Intent(this, RecipeActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.event:
+                intent = new Intent(this, EventActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_settings:
+                // TODO
+                break;
         }
+        return true;
 
-        return super.onOptionsItemSelected(item);
     }
 }
