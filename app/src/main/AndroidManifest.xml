@@ -16,6 +16,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".InventoryActivity"
+            android:label="@string/title_activity_inventory" >
+        </activity>
+        <activity
+            android:name=".ShoppingListActivity"
+            android:label="@string/title_activity_shopping_list" >
+        </activity>
+        <activity
+            android:name=".EventActivity"
+            android:label="@string/title_activity_event" >
+        </activity>
+        <activity
+            android:name=".RecipeActivity"
+            android:label="@string/title_activity_recipe" >
+        </activity>
     </application>
 
 </manifest>
