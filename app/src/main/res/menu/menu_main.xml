@@ -1,27 +1,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" android:showAsAction="never" />
+        android:orderInCategory="100" app:showAsAction="never" />
 
     <item android:id="@+id/inventory"
         android:title="@string/inventory"
-        android:icon="@drawable/test"
-        android:showAsAction="never" />
+        android:icon="@drawable/inventorymainbutton"
+        app:showAsAction="never" />
 
     <item android:id="@+id/shoppinglist"
         android:title="@string/shopping_list"
-        android:icon="@drawable/test"
-        android:showAsAction="never" />
+        android:icon="@drawable/shoppinglistmainbutton"
+        app:showAsAction="never" />
 
     <item android:id="@+id/recipe"
         android:title="@string/recipe"
-        android:icon="@drawable/test"
-        android:showAsAction="never"/>
+        android:icon="@drawable/recipemainbutton"
+        app:showAsAction="never"/>
 
     <item android:id="@+id/event"
         android:title="@string/event"
-        android:icon="@drawable/test"
-        android:showAsAction="never" />
+        android:icon="@drawable/eventmainbutton"
+        app:showAsAction="never" />
 
 </menu>

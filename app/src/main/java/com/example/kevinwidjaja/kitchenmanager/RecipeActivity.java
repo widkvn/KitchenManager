@@ -1,15 +1,15 @@
 package com.example.kevinwidjaja.kitchenmanager;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
 
 
-public class RecipeActivity extends Activity {
+public class RecipeActivity extends ActionBarActivity {
 
     private Toolbar toolbar;
     private Toolbar toolbar_bottom;
@@ -21,7 +21,7 @@ public class RecipeActivity extends Activity {
 
         // Main Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
         // Bottom Toolbar
         toolbar_bottom = (Toolbar) findViewById(R.id.toolbar_bottom);
