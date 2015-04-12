@@ -11,14 +11,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Toolbar;
 
 
 public class MainActivity extends Activity {
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Main Toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setActionBar(toolbar);
     }
 
 

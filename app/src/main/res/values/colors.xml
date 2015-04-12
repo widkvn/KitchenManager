@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="recipebg">#F1DAF3</color>
+    <color name="inventorybg">#D2F1FF</color>
+    <color name="shoppinglistbg">#DBCFFE</color>
+    <color name="eventbg">#D6ECA6</color>
+
+</resources>
