@@ -27,6 +27,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true" />
 
+    <!--
     <Button
         android:id="@+id/button1"
         android:layout_width="50dp"
@@ -35,14 +36,23 @@
         android:layout_marginBottom="24dp"
         android:layout_centerHorizontal="true"
         style="@style/PlusButton"/>
+    -->
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_input_add"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/toolbar"/>
 
     <!-- Editext for Search -->
     <EditText android:id="@+id/inputSearch"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/button1"
+        android:layout_below="@id/imageButton1"
         android:hint="Search for a recipe.."
-        android:inputType="textVisiblePassword"/>
+        android:inputType="textVisiblePassword"
+        android:layout_marginTop="15dp"/>
 
     <!-- List View -->
     <ListView

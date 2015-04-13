@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:hint="Recipe Name"
         android:inputType="textVisiblePassword"/>
+        <!--android:background="@drawable/edit_text_background" -->
 
     <!-- Editext for Ingredient Name -->
     <EditText android:id="@+id/ingredientName"
@@ -54,7 +55,7 @@
 
     <!-- Editext for Procedure -->
     <EditText android:id="@+id/procedure"
-        android:layout_width="100dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/servings"
         android:layout_alignParentLeft="true"

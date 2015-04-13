@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
@@ -29,7 +30,7 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
 
 
         //Edit Recipe button
-        Button recipe_button = (Button) findViewById(R.id.editRecipeButton);
+        ImageButton recipe_button = (ImageButton) findViewById(R.id.editRecipeButton);
         recipe_button.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -43,7 +44,7 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
         });
 
         //Delete Recipe button
-        Button delete_recipe_button = (Button) findViewById(R.id.deleteRecipeButton);
+        ImageButton delete_recipe_button = (ImageButton) findViewById(R.id.deleteRecipeButton);
         delete_recipe_button.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)

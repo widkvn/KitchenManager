@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -122,7 +123,7 @@ public class RecipeActivity extends ActionBarActivity {
         });
 
         //Add Recipe button
-        Button recipe_button = (Button) findViewById(R.id.button1);
+        ImageButton recipe_button = (ImageButton) findViewById(R.id.imageButton1);
         recipe_button.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)

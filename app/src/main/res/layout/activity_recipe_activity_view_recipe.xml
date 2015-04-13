@@ -7,26 +7,26 @@
     tools:context="com.example.kevinwidjaja.kitchenmanager.RecipeActivityViewRecipe">
 
     <!--Edit Recipe in DB Button -->
-    <Button
+
+    <ImageButton
         android:id="@+id/editRecipeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/procedure"
-        android:layout_marginBottom="84dp"
+        android:src="@android:drawable/ic_menu_edit"
+
+        android:layout_below="@id/toolbar"
         android:layout_gravity="left"
-        android:text="Edit Recipe" />
+        android:layout_alignParentLeft="true"/>
 
     <!--Delete Recipe Button -->
-    <Button
+    <ImageButton
         android:id="@+id/deleteRecipeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_delete"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/procedure"
-        android:layout_marginBottom="84dp"
-        android:layout_gravity="right"
-        android:text="Delete Recipe" />
+        android:layout_below="@id/toolbar"
+        android:layout_gravity="right"/>
 
 
 </RelativeLayout>
