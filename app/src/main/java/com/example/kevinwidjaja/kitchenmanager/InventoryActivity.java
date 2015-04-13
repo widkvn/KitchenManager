@@ -1,13 +1,24 @@
 package com.example.kevinwidjaja.kitchenmanager;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class InventoryActivity extends ActionBarActivity {
 
@@ -59,6 +70,47 @@ public class InventoryActivity extends ActionBarActivity {
         toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
 
 
+        // ListView
+        final ListView listview = (ListView) findViewById(R.id.listView);
+
+        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
+                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
+                "Android", "iPhone", "WindowsMobile" };
+
+        final ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0; i < values.length; ++i) {
+            list.add(values[i]);
+        }
+
+        final StableArrayAdapter adapter = new StableArrayAdapter(this,
+                android.R.layout.simple_list_item_1, list);
+        listview.setAdapter(adapter);
+
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(getApplicationContext(),
+                        "Click ListItem Number " + position, Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
+
+        // Add Button
+        ImageButton add = (ImageButton) findViewById(R.id.additem);
+        add.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Toast.makeText(getApplicationContext(), "Add", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
 
     }
 
@@ -102,5 +154,36 @@ public class InventoryActivity extends ActionBarActivity {
         return true;
 
     }
+
+
+    /**
+     * Listview related helper function
+     */
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context context, int textViewResourceId,
+                                  List<String> objects) {
+            super(context, textViewResourceId, objects);
+            for (int i = 0; i < objects.size(); ++i) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            String item = getItem(position);
+            return mIdMap.get(item);
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+    }
+
+
 
 }
