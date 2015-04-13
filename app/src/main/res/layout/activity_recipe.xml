@@ -27,10 +27,28 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true" />
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/toolbar"
+        android:layout_marginBottom="24dp"
+        android:layout_centerHorizontal="true"
+        style="@style/PlusButton"/>
+
+    <!-- Editext for Search -->
+    <EditText android:id="@+id/inputSearch"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@id/button1"
+        android:hint="Search for a recipe.."
+        android:inputType="textVisiblePassword"/>
+
+    <!-- List View -->
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputSearch"/>
 
 </RelativeLayout>
