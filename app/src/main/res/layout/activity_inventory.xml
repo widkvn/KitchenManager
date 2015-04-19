@@ -16,9 +16,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true" />
 
-
-
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_bottom"
         android:minHeight="?android:attr/actionBarSize"
@@ -44,10 +41,12 @@
             android:layout_width="match_parent"
             android:layout_height="45dp">
 
-            <SearchView
-                android:layout_width="wrap_content"
+            <AutoCompleteTextView
+                android:hint="Search..."
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/searchView"
+                android:id="@+id/searchItem"
+                android:inputType="textAutoComplete|textAutoCorrect"
                 android:layout_gravity="center_horizontal" />
         </LinearLayout>
 
@@ -78,11 +77,13 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal">
 
-            <ImageButton
+            <ImageView
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:id="@+id/additem"
-                android:layout_gravity="center_horizontal" />
+                android:id="@+id/addinventory"
+                android:src="@drawable/add"
+                android:layout_gravity="center_horizontal"
+                android:onClick="addInventory"/>
         </LinearLayout>
 
     </LinearLayout>
