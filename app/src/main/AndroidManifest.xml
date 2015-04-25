@@ -32,6 +32,14 @@
             android:name=".RecipeActivity"
             android:label="@string/title_activity_recipe" >
         </activity>
+        <activity
+            android:name=".ShoppingListActivity_add"
+            android:label="@string/title_activity_shopping_list_activity_add" >
+        </activity>
+        <activity
+            android:name=".ShoppingListActivity_edit"
+            android:label="@string/title_activity_shopping_list_activity_edit" >
+        </activity>
     </application>
 
 </manifest>

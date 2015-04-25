@@ -72,10 +72,8 @@ public class ShoppingListActivity extends ActionBarActivity {
         toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
 
 
-
         //Initiate DB
         db = new DBHelper(this);
-
 
         //Display List View
         // Setup the list view
@@ -89,18 +87,51 @@ public class ShoppingListActivity extends ActionBarActivity {
             inventoryAdapter.add(entry);
         }
 
-        // ListView Click listener
+        // ListView Click listener; go to edit activity
         newsEntryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
+                final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
                 final String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(getApplicationContext(),
                         "clicked " + item + " Position: " + position , Toast.LENGTH_LONG)
                         .show();
 
+                //bundle to pass value to another activity
+                Bundle localbundle = new Bundle();
+                localbundle.putString("name",pointer.getName());
+                localbundle.putInt("id",pointer.getId());
+                localbundle.putInt("quantity",pointer.getQuantity());
+                localbundle.putInt("unit_id",pointer.getUnit_id());
+                Intent intent = new Intent(ShoppingListActivity.this, ShoppingListActivity_edit.class);
+                intent.putExtras(localbundle);
+                startActivity(intent);
 
+
+            }
+        });
+
+        // ListView Long Click listener with remove implementation
+        newsEntryListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+
+                final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
+                final String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getApplicationContext(),
+                        "long clicked " + item + " Position: " + position, Toast.LENGTH_LONG)
+                        .show();
+
+                //removing from adapter view only (not including item in database)
+                //inventoryAdapter.remove(pointer);
+
+                //removing from database
+                //db.deleteInventory(pointer.getId());
+
+                return true;
             }
         });
 
@@ -184,7 +215,7 @@ public class ShoppingListActivity extends ActionBarActivity {
         final List<Inventory> entries = new ArrayList<Inventory>();
 
         for(int i = 1; i < 50; i++) {
-            entries.add(new Inventory("Test Entry " + i, i, i));
+            entries.add(new Inventory(i,"Test Entry " + i, i, i));
         }
 
         return entries;
@@ -195,6 +226,8 @@ public class ShoppingListActivity extends ActionBarActivity {
      */
     public void addShoppingList(View view) {
         Toast.makeText(getApplicationContext(), "Add Shopping List", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, ShoppingListActivity_add.class);
+        startActivity(intent);
     }
 
 }
