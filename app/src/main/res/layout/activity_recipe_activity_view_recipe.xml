@@ -6,6 +6,35 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.kevinwidjaja.kitchenmanager.RecipeActivityViewRecipe">
 
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="@color/recipebg"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_bottom"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="@color/recipebg"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true" />
+
+    <!-- View Recipe Image-->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="600dp"
+        android:layout_height="200dp"
+        android:src="@drawable/view_recipe"
+        android:layout_below="@id/toolbar"/>
+
     <!--Edit Recipe in DB Button -->
 
     <ImageButton
@@ -13,10 +42,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_edit"
-
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/imageView"
         android:layout_gravity="left"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true"
+        />
 
     <!--Delete Recipe Button -->
     <ImageButton
@@ -25,8 +54,16 @@
         android:layout_height="wrap_content"
         android:src="@android:drawable/ic_menu_delete"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/imageView"
         android:layout_gravity="right"/>
 
+    <!--TextView to display ingredients and procedure -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_below="@+id/editRecipeButton"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

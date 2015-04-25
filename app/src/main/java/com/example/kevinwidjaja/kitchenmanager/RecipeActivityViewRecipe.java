@@ -9,14 +9,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class RecipeActivityViewRecipe extends ActionBarActivity {
 
     Recipe recipe;
-    DBHelper db=new DBHelper(this);
+    DBHelper db;
     int recipe_id;
+
+    TextView text;
+    List<Inventory> allInventory;
+    List<RecipeInventory> allRecipeInventory;
+    List<String> InventoryNameList;
+    List<Integer> InventoryQtyList;
+    List<Integer> InventoryUnitList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +38,7 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         final String item_id=extras.getString("Item Id");
         recipe_id=Integer.parseInt(item_id);
-        Toast.makeText(getApplicationContext(),db.getRecipe(recipe_id).getName()+" "+db.getRecipe(recipe_id).getProcedure() , Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),db.getRecipe(recipe_id).getName()+" "+db.getRecipe(recipe_id).getProcedure() , Toast.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(), String.valueOf(recipe_id), Toast.LENGTH_LONG).show();
 
 
@@ -50,13 +63,17 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
             public void onClick(View v)
             {
                 // Perform action on click
+                db=new DBHelper(RecipeActivityViewRecipe.this);
                 db.deleteRecipe(recipe_id);
+                db.close();
                 finish();
 
             }
         });
 
-
+        //db.close();
+        //Text View
+        setTextView();
 
 }
 
@@ -81,5 +98,47 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void setTextView()
+    {
+        db=new DBHelper(RecipeActivityViewRecipe.this);
+        InventoryNameList=new ArrayList<String>();
+        InventoryQtyList=new ArrayList<Integer>();
+        InventoryUnitList=new ArrayList<Integer>();
+
+        Log.v("Viewrecipe","1st get all");
+        allInventory=db.getAllInventories();
+        Log.v("Viewrecipe","2nd get all");
+        allRecipeInventory=db.getAllRecipeInventory();
+        Log.v("Viewrecipe","after get all");
+
+        String textview_list="Ingredients\n\n";
+
+        for (RecipeInventory recipeInventory : allRecipeInventory)
+        {
+            if(recipeInventory.getRecipe_id()==recipe_id)
+            {
+                //Get inventory id from  RecipeInventory that corresponds to this recipe's id
+                //Go through allInventory and wherever you find the inventory id, return the inventory name.
+                InventoryQtyList.add(recipeInventory.getQuantity());
+                for (Inventory inventory : allInventory)
+                {
+                    if(inventory.getId()==recipeInventory.getInventory_id())
+                    {
+                        InventoryNameList.add(inventory.getName());
+                        InventoryUnitList.add(inventory.getUnit_id());
+                        textview_list=textview_list+inventory.getName()+"\t"+recipeInventory.getQuantity()+"\t"+inventory.getUnit_id()+"\n";
+                    }
+                }
+
+            }
+
+        }
+
+        String procedure="\nProcedure\n\n"+db.getRecipe(recipe_id).getProcedure();
+        text=(TextView) findViewById(R.id.textView);
+        String content=textview_list+procedure;
+        text.setText(content);
+        db.close();
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +40,9 @@ public class RecipeActivity extends ActionBarActivity {
     DBHelper db;
     List<Recipe> allRecipes;
     List<String> stringRecipeList;
+
+    List<Inventory> allInventories;
+    List<RecipeInventory> allRecipeInventory;
 
 
     @Override
@@ -129,9 +133,16 @@ public class RecipeActivity extends ActionBarActivity {
             public void onClick(View v)
             {
                 // Perform action on click
+
+                //Add temporary row entry to Recipe table
+                Recipe temp_recipe = new Recipe("","",0,0);
+                long temprecipe_id = db.createRecipe(temp_recipe);
+                String str_temprecipe_id=String.valueOf(temprecipe_id);
+
                 Intent myIntent = new Intent(RecipeActivity.this, RecipeActivityAddRecipe.class);
+                myIntent.putExtra("Recipe Id",str_temprecipe_id);
                 RecipeActivity.this.startActivity(myIntent);
-                //Toast.makeText(getApplicationContext(), "Recipe", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -149,7 +160,30 @@ public class RecipeActivity extends ActionBarActivity {
 
             }
         });
+        db.close();
 
+        //Log Test
+
+        db=new DBHelper(this);
+        //Displaying all items in Recipe table
+        for (Recipe recipe : allRecipes)
+        {
+            Log.d("RecipeTable", recipe.toString());
+        }
+        //Displaying all items in Inventory table
+        allInventories=db.getAllInventories();
+        for (Inventory inventory : allInventories)
+        {
+            Log.d("InventoryTable", inventory.toString());
+        }
+
+        //Displaying all items in RecipeInventory table
+        allRecipeInventory=db.getAllRecipeInventory();
+        for (RecipeInventory recipeinventory : allRecipeInventory)
+        {
+            Log.v("RITable", recipeinventory.toString());
+        }
+        db.close();
     }
 
 
@@ -191,5 +225,23 @@ public class RecipeActivity extends ActionBarActivity {
         }
         return true;
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        db= new DBHelper(this);
+        allRecipes=db.getAllRecipe();
+        stringRecipeList=new ArrayList<String>();
+        for (Recipe recipe : allRecipes)
+        {
+            stringRecipeList.add(recipe.getName());
+        }
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,stringRecipeList );
+
+        lv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        db.close();
     }
 }

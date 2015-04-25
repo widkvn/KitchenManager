@@ -30,7 +30,8 @@
         </activity>
         <activity
             android:name=".RecipeActivity"
-            android:label="@string/title_activity_recipe" >
+            android:label="@string/title_activity_recipe"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".RecipeActivityAddRecipe"
@@ -43,6 +44,10 @@
         <activity
             android:name=".RecipeActivityEditRecipe"
             android:label="@string/title_activity_recipe_activity_edit_recipe" >
+        </activity>
+        <activity
+            android:name=".RecipeAddIngredient"
+            android:label="@string/title_activity_recipe_add_ingredient" >
         </activity>
     </application>
 

@@ -97,6 +97,7 @@ public class RecipeActivityEditRecipe extends ActionBarActivity {
         recipe.setName(name);
         recipe.setProcedure(procedure);
         db.updateRecipe(recipe);
+        db.close();
         finish();
         /*
         Recipe recipe1 = new Recipe(name,procedure,serving,1);
