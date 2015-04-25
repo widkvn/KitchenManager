@@ -29,19 +29,10 @@ public class InventoryActivity extends ActionBarActivity {
     private Toolbar toolbar;
     private Toolbar toolbar_bottom;
 
-    //go to form button
-    private ImageView addInventory;
-
-    //used for add inventory form
-    final Context context = this;
     DBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //DB
-        db = new DBHelper(this);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inventory);
 
@@ -83,122 +74,67 @@ public class InventoryActivity extends ActionBarActivity {
         });
         toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
 
+        //Initiate DB
+        db = new DBHelper(this);
 
-        // ListView
-        final ListView listview = (ListView) findViewById(R.id.listView);
+        //Display List View
+        // Setup the list view
+        final ListView newsEntryListView = (ListView) findViewById(R.id.inventory_listView);
+        final InventoryAdapter inventoryAdapter = new InventoryAdapter(this, R.layout.activity_inventory_listitem);
+        newsEntryListView.setAdapter(inventoryAdapter);
 
-        //Extracting all information retained in database
-        final List<Inventory> allInventory = db.getAllInventories();
-        final HashMap<String, Integer> allInventoryMaps = new HashMap<String, Integer>();
-
-        //list for generating listview
-        final ArrayList<String> list = new ArrayList<String>();
-        Iterator<Inventory> it = allInventory.iterator();
-
-        while(it.hasNext()) {
-            Inventory current = it.next();
-            String inv_name = current.getName();
-            list.add(inv_name);
-            allInventoryMaps.put(inv_name, current.getId());
+        // Populate the list, through the adapter
+        for(final Inventory entry : getInventoryEntries()) {
+            inventoryAdapter.add(entry);
         }
 
-        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
-
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // ListView Click listener; go to edit activity
+        newsEntryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                final String item = (String) parent.getItemAtPosition(position);
-
-                //getting inventory ID from HashMap
-                int invID = allInventoryMaps.get(item);
-                db.deleteInventory(invID);
-                list.remove(item);
-
-                adapter.notifyDataSetChanged();
+                final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
+                final String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(getApplicationContext(),
-                        "Delete " + item + " ID: " + invID , Toast.LENGTH_LONG)
+                        "clicked " + item + " Position: " + position , Toast.LENGTH_LONG)
                         .show();
 
+                //bundle to pass value to another activity
+                Bundle localbundle = new Bundle();
+                localbundle.putString("name",pointer.getName());
+                localbundle.putInt("id",pointer.getId());
+                localbundle.putInt("quantity",pointer.getQuantity());
+                localbundle.putInt("unit_id",pointer.getUnit_id());
+                Intent intent = new Intent(InventoryActivity.this, InventoryActivity_edit.class);
+                intent.putExtras(localbundle);
+                startActivity(intent);
+
 
             }
         });
 
-
-        //Inventory add Button
-        addInventory = (ImageView) findViewById(R.id.addinventory);
-
-        // add button listener
-        addInventory.setOnClickListener(new View.OnClickListener() {
-
+        // ListView Long Click listener with remove implementation
+        newsEntryListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onClick(View arg0) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
 
-                // custom dialog
-                final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.activity_inventory_add);
-                dialog.setTitle("Add New Inventory");
+                final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
+                final String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getApplicationContext(),
+                        "long clicked " + item + " Position: " + position, Toast.LENGTH_LONG)
+                        .show();
 
-                final TextView newInventory_name = (TextView) dialog.findViewById(R.id.inventoryname);
-                final TextView newInventory_quantity = (TextView) dialog.findViewById(R.id.inventoryquantity);
-                final TextView newInventory_unit = (TextView) dialog.findViewById(R.id.inventoryunit);
+                //removing from adapter view only (not including item in database)
+                //inventoryAdapter.remove(pointer);
 
-                /*
-                // set the custom dialog components - text, image and button - Edit Related
-                TextView text = (TextView) dialog.findViewById(R.id.inventoryname);
-                text.setText("Android custom dialog example!");
-                ImageView image = (ImageView) dialog.findViewById(R.id.image);
-                image.setImageResource(R.drawable.test);
-                */
+                //removing from database
+                //db.deleteInventory(pointer.getId());
 
-                ImageView dialogButton = (ImageView) dialog.findViewById(R.id.addInventorypop);
-                // if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        String newInventory_name_val = null;
-                        Integer newInventory_quantity_val = null;
-                        Integer newInventory_unit_val = null;
-
-                        newInventory_name_val = newInventory_name.getText().toString();
-                        newInventory_quantity_val = Integer.parseInt(newInventory_quantity.getText().toString());
-                        newInventory_unit_val = Integer.parseInt(newInventory_unit.getText().toString());
-
-
-                        // Uniqueness check not yet implemented ************
-                        if(newInventory_name_val != null && newInventory_quantity_val >= 0 && newInventory_unit_val > 0){
-                            //Adding new Inventory
-                            db.createInventory(new Inventory(newInventory_name_val,newInventory_unit_val,newInventory_quantity_val));
-                            adapter.notifyDataSetChanged();
-                            dialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Added Inventory : " + newInventory_name.getText() + ":" + newInventory_quantity.getText() + ":" + newInventory_unit.getText(), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(InventoryActivity.this, InventoryActivity.class));
-                        }else {
-                            Toast.makeText(getApplicationContext(), "invalid input", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-
-                dialog.show();
+                return true;
             }
         });
-
-        //SearchBox implementation
-
-        /*
-        ArrayAdapter<String> adapterSearch = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, values);
-
-        AutoCompleteTextView searchItems = (AutoCompleteTextView) findViewById(R.id.searchItem);
-        searchItems.setAdapter(adapterSearch);
-        */
-
 
     }
 
@@ -243,41 +179,29 @@ public class InventoryActivity extends ActionBarActivity {
 
     }
 
+    private List<Inventory> getInventoryEntries() {
+
+        // Let's setup some test data.
+        // Normally this would come from some asynchronous fetch into a data source
+        // such as a sqlite database, or an HTTP request
+
+        final List<Inventory> entries = new ArrayList<Inventory>();
+
+        for(int i = 1; i < 50; i++) {
+            entries.add(new Inventory(i,"Test Entry " + i, i, i));
+        }
+
+        return entries;
+    }
+
     /**
      * Add Button action
      * @param view
      */
     public void addInventory(View view) {
         Toast.makeText(getApplicationContext(), "Add", Toast.LENGTH_SHORT).show();
-    }
-
-
-    /**
-     * Listview related helper function
-     */
-    private class StableArrayAdapter extends ArrayAdapter<String> {
-
-        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
-
-        public StableArrayAdapter(Context context, int textViewResourceId,
-                                  List<String> objects) {
-            super(context, textViewResourceId, objects);
-            for (int i = 0; i < objects.size(); ++i) {
-                mIdMap.put(objects.get(i), i);
-            }
-        }
-
-        @Override
-        public long getItemId(int position) {
-            String item = getItem(position);
-            return mIdMap.get(item);
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
-
+        Intent intent = new Intent(this, InventoryActivity_add.class);
+        startActivity(intent);
     }
 
 }

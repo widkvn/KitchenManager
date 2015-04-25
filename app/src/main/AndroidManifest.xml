@@ -40,6 +40,14 @@
             android:name=".ShoppingListActivity_edit"
             android:label="@string/title_activity_shopping_list_activity_edit" >
         </activity>
+        <activity
+            android:name=".InventoryActivity_add"
+            android:label="@string/title_activity_inventory_activity_add" >
+        </activity>
+        <activity
+            android:name=".InventoryActivity_edit"
+            android:label="@string/title_activity_inventory_activity_edit" >
+        </activity>
     </application>
 
 </manifest>
