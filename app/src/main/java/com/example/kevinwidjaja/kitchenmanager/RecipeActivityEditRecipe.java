@@ -1,7 +1,9 @@
 package com.example.kevinwidjaja.kitchenmanager;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +15,11 @@ import android.widget.Toast;
 import java.util.List;
 
 
-public class RecipeActivityEditRecipe extends ActionBarActivity {
+public class RecipeActivityEditRecipe extends ActionBarActivity
+{
+    private Toolbar toolbar;
+    private Toolbar toolbar_bottom;
+
 
     int recipe_id;
     DBHelper db=new DBHelper(this);
@@ -22,6 +28,44 @@ public class RecipeActivityEditRecipe extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_activity_edit_recipe);
+
+        // Main Toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Bottom Toolbar
+        toolbar_bottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+        toolbar_bottom.setTitle("Nav");
+        toolbar_bottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent;
+                switch(item.getItemId()){
+                    case R.id.inventory:
+                        Toast.makeText(getApplicationContext(), "Inventory", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeActivityEditRecipe.this, InventoryActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.shoppinglist:
+                        Toast.makeText(getApplicationContext(), "Shopping List", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeActivityEditRecipe.this, ShoppingListActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.recipe:
+                        Toast.makeText(getApplicationContext(), "Recipe", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeActivityEditRecipe.this, RecipeActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.event:
+                        Toast.makeText(getApplicationContext(), "Event", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeActivityEditRecipe.this, EventActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
+        toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
 
         Bundle extras = getIntent().getExtras();
         String item_id=extras.getString("Recipe Id");

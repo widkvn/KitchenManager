@@ -6,52 +6,50 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.kevinwidjaja.kitchenmanager.RecipeActivityEditRecipe">
 
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="@color/recipebg"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_bottom"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="@color/recipebg"
+        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true" />
+
     <!-- Editext for Recipe Name -->
     <EditText android:id="@+id/recipeName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/toolbar"
         android:hint="Recipe Name"
         android:inputType="textVisiblePassword"/>
         <!--android:background="@drawable/edit_text_background" -->
 
     <!-- Editext for Ingredient Name -->
-    <EditText android:id="@+id/ingredientName"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recipeName"
-        android:layout_alignParentLeft="true"
-        android:hint="Ingredient"
-        android:inputType="textVisiblePassword"/>
 
     <!-- Editext for Ingredient Qty -->
-    <EditText android:id="@+id/ingredientQty"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recipeName"
-        android:layout_toRightOf="@+id/ingredientName"
-        android:layout_centerHorizontal="true"
-        android:hint="Qty"
-        android:inputType="textVisiblePassword"/>
 
     <!-- Editext for Ingredient Unit -->
-    <EditText android:id="@+id/ingredientUnit"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/recipeName"
-        android:layout_toRightOf="@+id/ingredientQty"
-        android:layout_alignParentRight="true"
-        android:hint="Unit"
-        android:inputType="textVisiblePassword"/>
 
     <!-- Editext for Number of Servings -->
     <EditText android:id="@+id/servings"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ingredientName"
         android:layout_alignParentLeft="true"
         android:hint="Servings"
-        android:inputType="textVisiblePassword"/>
+        android:inputType="textVisiblePassword"
+        android:layout_below="@+id/recipeName" />
 
     <!-- Editext for Procedure -->
     <EditText android:id="@+id/procedure"

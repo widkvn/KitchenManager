@@ -2,8 +2,10 @@ package com.example.kevinwidjaja.kitchenmanager;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +26,9 @@ import java.util.List;
 
 
 public class RecipeAddIngredient extends ActionBarActivity {
+
+    private Toolbar toolbar;
+    private Toolbar toolbar_bottom;
 
     Button addIngredientButton;
     Button doneButton;
@@ -49,6 +54,44 @@ public class RecipeAddIngredient extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_add_ingredient);
+
+        // Main Toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Bottom Toolbar
+        toolbar_bottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+        toolbar_bottom.setTitle("Nav");
+        toolbar_bottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent;
+                switch(item.getItemId()){
+                    case R.id.inventory:
+                        Toast.makeText(getApplicationContext(), "Inventory", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeAddIngredient.this, InventoryActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.shoppinglist:
+                        Toast.makeText(getApplicationContext(), "Shopping List", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeAddIngredient.this, ShoppingListActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.recipe:
+                        Toast.makeText(getApplicationContext(), "Recipe", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeAddIngredient.this, RecipeActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.event:
+                        Toast.makeText(getApplicationContext(), "Event", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeAddIngredient.this, EventActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
+        toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
 
         is_new_ingredient=1;
 

@@ -3,6 +3,7 @@ package com.example.kevinwidjaja.kitchenmanager;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,12 +11,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class RecipeActivityAddRecipe extends ActionBarActivity {
+
+    private Toolbar toolbar;
+    private Toolbar toolbar_bottom;
+
 
     Button addRecipeButton;
     Button addIngredientButton;
@@ -34,6 +40,45 @@ public class RecipeActivityAddRecipe extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_activity_add_recipe);
+
+        // Main Toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Bottom Toolbar
+        toolbar_bottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+        toolbar_bottom.setTitle("Nav");
+        toolbar_bottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent;
+                switch(item.getItemId()){
+                    case R.id.inventory:
+                        Toast.makeText(getApplicationContext(), "Inventory", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeActivityAddRecipe.this, InventoryActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.shoppinglist:
+                        Toast.makeText(getApplicationContext(), "Shopping List", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeActivityAddRecipe.this, ShoppingListActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.recipe:
+                        Toast.makeText(getApplicationContext(), "Recipe", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeActivityAddRecipe.this, RecipeActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.event:
+                        Toast.makeText(getApplicationContext(), "Event", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(RecipeActivityAddRecipe.this, EventActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
+        toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
+
 
         db = new DBHelper(this);
 
@@ -63,7 +108,7 @@ public class RecipeActivityAddRecipe extends ActionBarActivity {
 
                 db.deleteRecipe(temp_recipe_id);
 
-                /*
+
                 //Delete temporary recipe-inventory entries from recipeInventory table
                 List<RecipeInventory> allRecipeInventory = db.getAllRecipeInventory();
                 for (RecipeInventory recipeInventory : allRecipeInventory)
@@ -73,7 +118,7 @@ public class RecipeActivityAddRecipe extends ActionBarActivity {
                         db.deleteRecipeInventory(recipeInventory.getId());
                     }
                 }
-                */
+
                 db.close();
                 finish();
             }
