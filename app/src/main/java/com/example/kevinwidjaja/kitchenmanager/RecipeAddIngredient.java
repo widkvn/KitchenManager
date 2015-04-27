@@ -34,6 +34,10 @@ public class RecipeAddIngredient extends ActionBarActivity {
     Button doneButton;
     DBHelper db;
     List<String> stringInventoryList,listViewInventoryList;
+    List<Integer> listViewRecInv_IdList;
+
+    ArrayAdapter<String> spinnerArrayAdapter;
+
     EditText ingredientName,qty,unit;
     //ListView
     ListView inventory_list;
@@ -109,6 +113,7 @@ public class RecipeAddIngredient extends ActionBarActivity {
 
         stringInventoryList=new ArrayList<String>();
         listViewInventoryList=new ArrayList<String>();
+        listViewRecInv_IdList=new ArrayList<Integer>();
         allInventory = db.getAllInventories();
 
 
@@ -133,6 +138,7 @@ public class RecipeAddIngredient extends ActionBarActivity {
                     if(inventory.getId()==recipeInventory.getInventory_id())
                     {
                         listViewInventoryList.add(inventory.getName());
+                        listViewRecInv_IdList.add(recipeInventory.getId());// Get RecipeInventory Id corresponding to item in listViewInventoryList
                     }
                 }
             }
@@ -142,6 +148,8 @@ public class RecipeAddIngredient extends ActionBarActivity {
         inventorylist_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,listViewInventoryList );
         inventory_list.setAdapter(inventorylist_adapter);
         inventorylist_adapter.notifyDataSetChanged();
+
+        db.close();
 
         //On Long Click, delete item in list
         inventory_list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
@@ -202,7 +210,7 @@ public class RecipeAddIngredient extends ActionBarActivity {
 
 
         Spinner spinner = (Spinner) findViewById(R.id.ingredientNames);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringInventoryList); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringInventoryList); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerArrayAdapter);
         spinner.setOnItemSelectedListener(new OnItemSelectedListener()
@@ -304,6 +312,8 @@ public class RecipeAddIngredient extends ActionBarActivity {
 
         db.close();
 
+        refreshSpinner();
+
         refreshAddIngredientPage();
         return true;
     }
@@ -314,13 +324,16 @@ public class RecipeAddIngredient extends ActionBarActivity {
         qty.setText("");
         unit.setText("");
         refreshIngredientListView();
-        db.close();
+        //db.close();
     }
     public void yes(int pos)
     {
         db = new DBHelper(this);
-        allInventory = db.getAllInventories();
-        db.deleteInventory(allInventory.get(pos).getId());
+        /*
+        allRecipeInventory=db.getAllRecipeInventory();
+        Log.v("yes",allRecipeInventory.get(pos).toString());
+        */
+        db.deleteRecipeInventory(listViewRecInv_IdList.get(pos));
         db.close();
         refreshIngredientListView();
     }
@@ -332,43 +345,56 @@ public class RecipeAddIngredient extends ActionBarActivity {
     //Refresh List View from Inventory Recipe page
     public void refreshIngredientListView()
     {
+
         db = new DBHelper(this);
 
         //Populating Ingredients listView with RecipeInventory contents.
 
         allRecipeInventory=db.getAllRecipeInventory();
+        allInventory=db.getAllInventories();
         listViewInventoryList.clear();
+        listViewRecInv_IdList.clear();
+
         for (RecipeInventory recipeInventory : allRecipeInventory)
         {
+
             if(recipeInventory.getRecipe_id()==temp_recipe_id)
             {
+
                 //Get inventory id from  RecipeInventory that corresponds to this recipe's id
                 //Go through allInventory and wherever you find the inventory id, return the inventory name.
                 for (Inventory inventory : allInventory)
                 {
+
                     if(inventory.getId()==recipeInventory.getInventory_id())
                     {
                         listViewInventoryList.add(inventory.getName());
+                        listViewRecInv_IdList.add(recipeInventory.getId());// Get RecipeInventory Id corresponding to item in listViewInventoryList
+
                     }
                 }
             }
 
         }
+
         inventorylist_adapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,listViewInventoryList );
         inventory_list.setAdapter(inventorylist_adapter);
         inventorylist_adapter.notifyDataSetChanged();
-        /*
-        //Refresh Ingredient List View
+
+        db.close();
+    }
+    void refreshSpinner()
+    {
+        //Populating spinner list with Inventory
+        db=new DBHelper(this);
         allInventory = db.getAllInventories();
-        listViewInventoryList.clear();
+        stringInventoryList.clear();
+        stringInventoryList.add("Add new ingredient");
         for (Inventory inventory : allInventory)
         {
-            listViewInventoryList.add(inventory.getName());
+            stringInventoryList.add(inventory.getName());
         }
-        inventorylist_adapter= new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,listViewInventoryList );
-        inventory_list.setAdapter(inventorylist_adapter);
-        inventorylist_adapter.notifyDataSetChanged();
-        */
+        spinnerArrayAdapter.notifyDataSetChanged();
         db.close();
     }
 

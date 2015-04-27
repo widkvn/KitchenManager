@@ -34,6 +34,7 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
     List<Integer> InventoryQtyList;
     List<Integer> InventoryUnitList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +107,18 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
             {
                 // Perform action on click
                 db=new DBHelper(RecipeActivityViewRecipe.this);
+
+                //Delete corresponding entries in recipe-inventory
+                allRecipeInventory=db.getAllRecipeInventory();
+                for (RecipeInventory recipeInventory : allRecipeInventory)
+                {
+                    if(recipeInventory.getRecipe_id()==recipe_id)
+                    {
+                        Log.v("ViewRecipe","Deleting");
+                        db.deleteRecipeInventory(recipeInventory.getId());
+                    }
+                }
+
                 db.deleteRecipe(recipe_id);
                 db.close();
                 finish();
@@ -147,6 +160,7 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
         InventoryNameList=new ArrayList<String>();
         InventoryQtyList=new ArrayList<Integer>();
         InventoryUnitList=new ArrayList<Integer>();
+
 
         Log.v("Viewrecipe","1st get all");
         allInventory=db.getAllInventories();

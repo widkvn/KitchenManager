@@ -106,6 +106,7 @@ public class RecipeActivity extends ActionBarActivity {
         lv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        db.close();
         //Search functionality
         inputSearch.addTextChangedListener(new TextWatcher()
         {
@@ -133,15 +134,17 @@ public class RecipeActivity extends ActionBarActivity {
             public void onClick(View v)
             {
                 // Perform action on click
-
+                db=new DBHelper(RecipeActivity.this);
                 //Add temporary row entry to Recipe table
                 Recipe temp_recipe = new Recipe("","",0,0);
                 long temprecipe_id = db.createRecipe(temp_recipe);
+                db.close();
                 String str_temprecipe_id=String.valueOf(temprecipe_id);
 
                 Intent myIntent = new Intent(RecipeActivity.this, RecipeActivityAddRecipe.class);
                 myIntent.putExtra("Recipe Id",str_temprecipe_id);
                 RecipeActivity.this.startActivity(myIntent);
+
 
             }
         });
@@ -160,7 +163,7 @@ public class RecipeActivity extends ActionBarActivity {
 
             }
         });
-        db.close();
+
 
         //Log Test
 

@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:hint="Servings"
         android:inputType="textVisiblePassword"
-        android:layout_above="@+id/procedure"
+        android:layout_below="@+id/addIngredientButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:hint="Procedure"
         android:inputType="textVisiblePassword"
-        android:layout_above="@+id/addRecipeButton"
+        android:layout_below="@+id/servings"
         android:layout_alignRight="@+id/addRecipeButton"
         android:layout_alignEnd="@+id/addRecipeButton" />
 
@@ -66,7 +66,8 @@
         android:text="Add Recipe"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true" />
+        android:layout_below="@+id/procedure"
+         />
 
     <!--Cancel recipe Button -->
     <Button
@@ -76,22 +77,22 @@
         android:text="Cancel"
         android:layout_alignTop="@+id/addRecipeButton"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/procedure"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Ingredients"
         android:id="@+id/addIngredientButton"
-        android:layout_below="@+id/recipeName"
+        android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:id="@+id/textView"
-        android:layout_above="@+id/servings"
+        android:layout_below="@+id/recipeName"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

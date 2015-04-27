@@ -76,6 +76,8 @@ public class RecipeActivityEditRecipe extends ActionBarActivity
         recipe_name.setText(db.getRecipe(recipe_id).getName());
         EditText procedure = (EditText) findViewById(R.id.procedure);
         procedure.setText(db.getRecipe(recipe_id).getProcedure());
+        EditText serving = (EditText) findViewById(R.id.servings);
+        serving.setText(String.valueOf(db.getRecipe(recipe_id).getServing()));
 
         //Update Recipe in DB Button
         updateRecipeButton = (Button) findViewById(R.id.updateRecipeButton);
@@ -126,7 +128,7 @@ public class RecipeActivityEditRecipe extends ActionBarActivity
 
     public boolean UpdateRecipe()
     {
-        EditText recipeName,procedureField;
+        EditText recipeName,procedureField,servingField;
         //DBHelper db;
         Recipe recipe=new Recipe();
         String name="", procedure="";
@@ -134,12 +136,21 @@ public class RecipeActivityEditRecipe extends ActionBarActivity
         //db = new DBHelper(this);
         recipeName=(EditText)findViewById(R.id.recipeName);
         procedureField=(EditText)findViewById(R.id.procedure);
+        servingField=(EditText)findViewById(R.id.servings);
+
         name=recipeName.getText().toString();
         procedure=procedureField.getText().toString();
+        serving=Integer.parseInt(servingField.getText().toString());
+
+
         Log.v("RecipeEditRecipeForm", name);
         recipe.setId((int)recipe_id);
         recipe.setName(name);
         recipe.setProcedure(procedure);
+        recipe.setServing(serving);
+
+        Log.v("EditRecipeServing", String.valueOf(serving));
+
         db.updateRecipe(recipe);
         db.close();
         finish();

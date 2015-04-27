@@ -165,7 +165,7 @@ public class RecipeActivityAddRecipe extends ActionBarActivity {
 
     public boolean AddRecipe()
     {
-        EditText recipeName,procedureField;
+        EditText recipeName,procedureField,servingField;
 
         String name="", procedure="";
         int serving=0;
@@ -173,9 +173,12 @@ public class RecipeActivityAddRecipe extends ActionBarActivity {
 
         recipeName=(EditText)findViewById(R.id.recipeName);
         procedureField=(EditText)findViewById(R.id.procedure);
+        servingField=(EditText)findViewById(R.id.servings);
+
         name=recipeName.getText().toString();
         procedure=procedureField.getText().toString();
-        //Log.v("RecipeAddRecipeForm", name);
+        serving=Integer.parseInt(servingField.getText().toString());
+        Log.v("AddRecipeServing", String.valueOf(serving));
 
         Recipe recipe1 = new Recipe(temp_recipe_id,name,procedure,serving,1);
 
