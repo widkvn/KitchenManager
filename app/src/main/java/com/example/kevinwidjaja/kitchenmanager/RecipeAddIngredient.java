@@ -226,7 +226,7 @@ public class RecipeAddIngredient extends ActionBarActivity {
                 if(arg2==0)
                 {
                     is_new_ingredient=1;
-                    Toast.makeText(getApplicationContext(), "Clicked on first item !", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Clicked on first item !", Toast.LENGTH_LONG).show();
                     ingredientName.setVisibility(View.VISIBLE);
                     
                 }

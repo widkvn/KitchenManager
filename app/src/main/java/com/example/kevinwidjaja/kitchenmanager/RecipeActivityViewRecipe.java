@@ -197,4 +197,11 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
         text.setText(content);
         db.close();
     }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        setTextView();
+    }
 }

@@ -11,9 +11,9 @@
     <string name="title_activity_shopping_list">Shopping List</string>
     <string name="title_activity_event">Event</string>
     <string name="title_activity_recipe">Recipe</string>
-    <string name="title_activity_recipe_activity_add_recipe">RecipeActivityAddRecipe</string>
-    <string name="title_activity_recipe_activity_view_recipe">RecipeActivityViewRecipe</string>
-    <string name="title_activity_recipe_activity_edit_recipe">RecipeActivityEditRecipe</string>
+    <string name="title_activity_recipe_activity_add_recipe">Add Recipe</string>
+    <string name="title_activity_recipe_activity_view_recipe">View Recipe</string>
+    <string name="title_activity_recipe_activity_edit_recipe">Edit Recipe</string>
     <string name="title_activity_toolbar">ToolbarActivity</string>
-    <string name="title_activity_recipe_add_ingredient">RecipeAddIngredient</string>
+    <string name="title_activity_recipe_add_ingredient">Add Ingredient</string>
 </resources>

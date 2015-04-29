@@ -32,10 +32,10 @@
     <EditText android:id="@+id/recipeName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-
         android:hint="Recipe Name"
         android:inputType="textVisiblePassword"
-        android:layout_below="@+id/toolbar"/>
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="10dp"/>
 
     <!-- Editext for Number of Servings -->
     <EditText android:id="@+id/servings"
@@ -45,17 +45,20 @@
         android:inputType="textVisiblePassword"
         android:layout_below="@+id/addIngredientButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+       />
 
     <!-- Editext for Procedure -->
     <EditText android:id="@+id/procedure"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:hint="Procedure"
-        android:inputType="textVisiblePassword"
+        android:inputType="textMultiLine"
         android:layout_below="@+id/servings"
-        android:layout_alignRight="@+id/addRecipeButton"
-        android:layout_alignEnd="@+id/addRecipeButton" />
+        android:background="@drawable/edittext_box"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:singleLine="false"/>
 
     <!--Add Recipe to DB Button -->
     <Button
@@ -93,6 +96,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView"
         android:layout_below="@+id/recipeName"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>

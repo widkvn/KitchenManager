@@ -19,6 +19,8 @@ import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -101,6 +103,9 @@ public class RecipeActivity extends ActionBarActivity {
         {
             stringRecipeList.add(recipe.getName());
         }
+        //Sort Recipe List alphabetically
+            //Collections.sort(stringRecipeList, String.CASE_INSENSITIVE_ORDER);
+            //stringRecipeList=sortList(stringRecipeList);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,stringRecipeList );
 
         lv.setAdapter(adapter);
@@ -241,10 +246,26 @@ public class RecipeActivity extends ActionBarActivity {
         {
             stringRecipeList.add(recipe.getName());
         }
+        //Collections.sort(stringRecipeList, String.CASE_INSENSITIVE_ORDER);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,stringRecipeList );
 
         lv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         db.close();
     }
+    /*
+    public List<String> sortList(List<String> list)
+    {
+
+        Collections.sort(list, new Comparator() {
+            @Override
+            public int compare(Object listItemOne, Object listItemTwo)
+            {
+                //use instanceof to verify the references are indeed of the type in question
+                return ((String) listItemOne).value
+                        .compareTo(((SoftDrink) softDrinkTwo).name);
+            }
+        });
+    }
+    */
 }
