@@ -39,9 +39,11 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="45dp">
+            android:layout_height="45dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true" >
 
-            <SearchView
+            <AutoCompleteTextView
                 android:hint="Search..."
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

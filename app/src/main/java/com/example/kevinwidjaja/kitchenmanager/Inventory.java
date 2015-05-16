@@ -67,4 +67,8 @@ public class Inventory {
         return this.getId() + "," + this.getName() + "," + this.getUnit_id() + "," + this.getQuantity();
     }
 
+    public String toStringList(){
+        return /*"ID: " + this.getId() + "\t\t*/"Quantity: " + this.getQuantity() + "\t\tMeasure: " + this.getUnit_id();
+    }
+
 }

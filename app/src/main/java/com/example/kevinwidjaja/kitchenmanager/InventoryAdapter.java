@@ -35,7 +35,7 @@ public class InventoryAdapter extends ArrayAdapter<Inventory> {
 
         // Setting the subTitle view
         //viewHolder.subTitleView.setText(new Integer(entry.getQuantity()).toString());
-        viewHolder.subTitleView.setText(entry.toString());
+        viewHolder.subTitleView.setText(entry.toStringList());
 
         // Setting image view is also simple
         viewHolder.imageView.setImageResource(R.drawable.bag);

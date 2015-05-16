@@ -1,8 +1,10 @@
 package com.example.kevinwidjaja.kitchenmanager;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -96,9 +98,11 @@ public class InventoryActivity extends ActionBarActivity {
 
                 final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
                 final String item = parent.getItemAtPosition(position).toString();
+                /*
                 Toast.makeText(getApplicationContext(),
                         "clicked " + item + " Position: " + position , Toast.LENGTH_LONG)
                         .show();
+                        */
 
                 //bundle to pass value to another activity
                 Bundle localbundle = new Bundle();
@@ -126,15 +130,28 @@ public class InventoryActivity extends ActionBarActivity {
                         "long clicked " + item + " Position: " + position, Toast.LENGTH_LONG)
                         .show();
 
-                //removing from adapter view only (not including item in database)
-                //inventoryAdapter.remove(pointer);
+                //popup confirmation delete
+                new AlertDialog.Builder(InventoryActivity.this)
+                        .setTitle("Delete Inventory")
+                        .setMessage("Do you really want to delete " + pointer.getName() + " ?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                //removing from database
-                //db.deleteInventory(pointer.getId());
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(InventoryActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                //removing from database
+                                db.deleteInventory(pointer.getId());
+
+                                //removing from adapter view only (not including item in database)
+                                inventoryAdapter.remove(pointer);
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
 
                 return true;
             }
         });
+
+        //Search
 
     }
 
@@ -185,12 +202,17 @@ public class InventoryActivity extends ActionBarActivity {
         // Normally this would come from some asynchronous fetch into a data source
         // such as a sqlite database, or an HTTP request
 
+        db = new DBHelper(this);
+        final List<Inventory> entries = db.getAllInventories();
+        /*
+        // mock Entry for testing
         final List<Inventory> entries = new ArrayList<Inventory>();
 
         for(int i = 1; i < 50; i++) {
             entries.add(new Inventory(i,"Test Entry " + i, i, i));
         }
-
+        */
+        db.closeDB();
         return entries;
     }
 
