@@ -35,7 +35,11 @@ public class InventoryAdapter extends ArrayAdapter<Inventory> {
 
         // Setting the subTitle view
         //viewHolder.subTitleView.setText(new Integer(entry.getQuantity()).toString());
-        viewHolder.subTitleView.setText(entry.toStringList());
+        int unitIdx = entry.getUnit_id();
+        DBHelper db = new DBHelper(this.getContext());
+        String metric = db.getUnitMeasure((long) unitIdx).getMetric();
+        viewHolder.subTitleView.setText("Quantity:" + entry.getQuantity() + "\tUnitMeasure:" + metric);
+        db.closeDB();
 
         // Setting image view is also simple
         viewHolder.imageView.setImageResource(R.drawable.bag);

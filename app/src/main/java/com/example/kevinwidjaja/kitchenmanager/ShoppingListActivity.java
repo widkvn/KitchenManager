@@ -104,7 +104,7 @@ public class ShoppingListActivity extends ActionBarActivity {
                 localbundle.putString("name",pointer.getName());
                 localbundle.putInt("id",pointer.getId());
                 localbundle.putInt("quantity",pointer.getQuantity());
-                localbundle.putInt("unit_id",pointer.getUnit_id());
+                localbundle.putInt("unit_id", pointer.getUnit_id());
                 Intent intent = new Intent(ShoppingListActivity.this, ShoppingListActivity_edit.class);
                 intent.putExtras(localbundle);
                 startActivity(intent);
@@ -212,12 +212,17 @@ public class ShoppingListActivity extends ActionBarActivity {
         // Normally this would come from some asynchronous fetch into a data source
         // such as a sqlite database, or an HTTP request
 
+        db = new DBHelper(this);
+        final List<Inventory> entries = db.getAllInventories();
+        /*
+        // mock Entry for testing
         final List<Inventory> entries = new ArrayList<Inventory>();
 
         for(int i = 1; i < 50; i++) {
             entries.add(new Inventory(i,"Test Entry " + i, i, i));
         }
-
+        */
+        db.closeDB();
         return entries;
     }
 

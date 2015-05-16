@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Iterator;
+import java.util.List;
 
 
 public class InventoryActivity_add extends ActionBarActivity {
@@ -111,7 +115,7 @@ public class InventoryActivity_add extends ActionBarActivity {
         final TextView newInventory_unit = (TextView) findViewById(R.id.inventoryunit);
         String newInventory_name_val = null;
         Integer newInventory_quantity_val = null;
-        Integer newInventory_unit_val = null;
+        String newInventory_unit_val = null;
 
         //consistency check before adding
         //name check
@@ -134,13 +138,8 @@ public class InventoryActivity_add extends ActionBarActivity {
         }
 
         //unit check
-        check = newInventory_unit.getText().toString();
-        if(check.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "unfilled unit", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        newInventory_unit_val = Integer.parseInt(newInventory_unit.getText().toString());
-        if(newInventory_unit_val <= 0) {
+        newInventory_unit_val = newInventory_unit.getText().toString();
+        if(newInventory_unit_val == null || newInventory_unit_val.isEmpty()) {
             Toast.makeText(getApplicationContext(), "invalid unit", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -148,10 +147,34 @@ public class InventoryActivity_add extends ActionBarActivity {
 
         //Toast.makeText(getApplicationContext(), "Added Inventory : " + newInventory_name.getText() + ":" + newInventory_quantity.getText() + ":" + newInventory_unit.getText(), Toast.LENGTH_SHORT).show();
 
-        //adding inventory
-        Inventory inv = new Inventory(newInventory_name_val, newInventory_unit_val, newInventory_quantity_val);
+        //initiate db
         DBHelper db = new DBHelper(this);
-        db.createInventory(inv);
+        //check appropiate Unit
+        List<UnitMeasure> umList = db.getAllUnitMeasure();
+        Iterator<UnitMeasure> it = umList.iterator();
+        boolean isExist = false;
+        int idx = -1;
+        while(it.hasNext()) {
+            UnitMeasure target = it.next();
+            if(target.getMetric().compareToIgnoreCase(newInventory_unit_val) == 0) {
+                isExist = true;
+                idx = target.getId();
+            }
+        }
+
+        //adding inventory
+        if(isExist) { //if exist in database
+            //Toast.makeText(getApplicationContext(), "Exist", Toast.LENGTH_SHORT).show();
+            Inventory inv = new Inventory(newInventory_name_val, idx, newInventory_quantity_val);
+            db.createInventory(inv);
+        } else { // not exist create new UnitMeasure
+            //Toast.makeText(getApplicationContext(), "not Exist", Toast.LENGTH_SHORT).show();
+            UnitMeasure um = new UnitMeasure(newInventory_unit_val);
+            idx = (int) db.createUnitMeasure(um);
+            Inventory inv = new Inventory(newInventory_name_val, idx, newInventory_quantity_val);
+            db.createInventory(inv);
+        }
+
         db.closeDB();
         //go back
         Intent intent = new Intent(this, InventoryActivity.class);
