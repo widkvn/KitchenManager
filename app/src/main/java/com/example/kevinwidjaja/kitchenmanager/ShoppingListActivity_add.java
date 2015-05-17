@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Iterator;
+import java.util.List;
+
 
 public class ShoppingListActivity_add extends ActionBarActivity {
 
@@ -113,15 +116,73 @@ public class ShoppingListActivity_add extends ActionBarActivity {
         final TextView newInventory_unit = (TextView) findViewById(R.id.inventoryunit);
         String newInventory_name_val = null;
         Integer newInventory_quantity_val = null;
-        Integer newInventory_unit_val = null;
-
-        newInventory_name_val = newInventory_name.getText().toString();
-        newInventory_quantity_val = Integer.parseInt(newInventory_quantity.getText().toString());
-        newInventory_unit_val = Integer.parseInt(newInventory_unit.getText().toString());
-
-        Toast.makeText(getApplicationContext(), "Added Inventory : " + newInventory_name.getText() + ":" + newInventory_quantity.getText() + ":" + newInventory_unit.getText(), Toast.LENGTH_SHORT).show();
+        String newInventory_unit_val = null;
 
         //consistency check before adding
+        //name check
+        newInventory_name_val = newInventory_name.getText().toString();
+        if(newInventory_name_val == null || newInventory_name_val.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "invalid name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //quantity check
+        String check = newInventory_quantity.getText().toString();
+        if(check.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "unfilled quantity", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        newInventory_quantity_val = Integer.parseInt(newInventory_quantity.getText().toString());
+        if(newInventory_quantity_val < 0) {
+            Toast.makeText(getApplicationContext(), "invalid quantity", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //unit check
+        newInventory_unit_val = newInventory_unit.getText().toString();
+        if(newInventory_unit_val == null || newInventory_unit_val.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "invalid unit", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //////
+
+        //Toast.makeText(getApplicationContext(), "Added Inventory : " + newInventory_name.getText() + ":" + newInventory_quantity.getText() + ":" + newInventory_unit.getText(), Toast.LENGTH_SHORT).show();
+
+        //initiate db
+        DBHelper db = new DBHelper(this);
+        //check appropiate Unit
+        List<UnitMeasure> umList = db.getAllUnitMeasure();
+        Iterator<UnitMeasure> it = umList.iterator();
+        boolean isExist = false;
+        int idx = -1;
+        while(it.hasNext()) {
+            UnitMeasure target = it.next();
+            if(target.getMetric().compareToIgnoreCase(newInventory_unit_val) == 0) {
+                isExist = true;
+                idx = target.getId();
+            }
+        }
+
+        //negate quantity
+        newInventory_quantity_val *= -1;
+
+        //adding inventory
+        if(isExist) { //if exist in database
+            //Toast.makeText(getApplicationContext(), "Exist", Toast.LENGTH_SHORT).show();
+            Inventory inv = new Inventory(newInventory_name_val, idx, newInventory_quantity_val);
+            db.createInventory(inv);
+        } else { // not exist create new UnitMeasure
+            //Toast.makeText(getApplicationContext(), "not Exist", Toast.LENGTH_SHORT).show();
+            UnitMeasure um = new UnitMeasure(newInventory_unit_val);
+            idx = (int) db.createUnitMeasure(um);
+            Inventory inv = new Inventory(newInventory_name_val, idx, newInventory_quantity_val);
+            db.createInventory(inv);
+        }
+
+        db.closeDB();
+        //go back
+        Intent intent = new Intent(this, ShoppingListActivity.class);
+        startActivity(intent);
 
 
     }

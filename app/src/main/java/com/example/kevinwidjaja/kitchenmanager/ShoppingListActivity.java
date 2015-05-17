@@ -1,5 +1,7 @@
 package com.example.kevinwidjaja.kitchenmanager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -95,16 +98,18 @@ public class ShoppingListActivity extends ActionBarActivity {
 
                 final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
                 final String item = parent.getItemAtPosition(position).toString();
+                /*
                 Toast.makeText(getApplicationContext(),
                         "clicked " + item + " Position: " + position , Toast.LENGTH_LONG)
-                        .show();
+                        .show();*/
+
 
                 //bundle to pass value to another activity
                 Bundle localbundle = new Bundle();
                 localbundle.putString("name",pointer.getName());
                 localbundle.putInt("id",pointer.getId());
                 localbundle.putInt("quantity",pointer.getQuantity());
-                localbundle.putInt("unit_id", pointer.getUnit_id());
+                localbundle.putInt("unit_id",pointer.getUnit_id());
                 Intent intent = new Intent(ShoppingListActivity.this, ShoppingListActivity_edit.class);
                 intent.putExtras(localbundle);
                 startActivity(intent);
@@ -121,15 +126,33 @@ public class ShoppingListActivity extends ActionBarActivity {
 
                 final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
                 final String item = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         "long clicked " + item + " Position: " + position, Toast.LENGTH_LONG)
-                        .show();
+                        .show();*/
 
-                //removing from adapter view only (not including item in database)
-                //inventoryAdapter.remove(pointer);
+                //popup confirmation delete
+                new AlertDialog.Builder(ShoppingListActivity.this)
+                        .setTitle("Move to Inventory")
+                        .setMessage("Do you really want to move " + pointer.getName() + " ?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                //removing from database
-                //db.deleteInventory(pointer.getId());
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Toast.makeText(ShoppingListActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+
+                                /*
+                                //removing from database
+                                db.deleteInventory(pointer.getId());*/
+
+                                //Move to Inventory by making the quantity positive
+                                pointer.setQuantity(pointer.getQuantity()*-1);
+                                db.updateInventory(pointer);
+
+                                //removing from adapter view only (not including item in database)
+                                inventoryAdapter.remove(pointer);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
 
                 return true;
             }
@@ -214,6 +237,14 @@ public class ShoppingListActivity extends ActionBarActivity {
 
         db = new DBHelper(this);
         final List<Inventory> entries = db.getAllInventories();
+        final List<Inventory> entriesShopList = new ArrayList<Inventory>();
+        Iterator<Inventory> it = entries.iterator();
+        while(it.hasNext()) {
+            Inventory target = it.next();
+            if(target.getQuantity() < 0) {
+                entriesShopList.add(target);
+            }
+        }
         /*
         // mock Entry for testing
         final List<Inventory> entries = new ArrayList<Inventory>();
@@ -223,14 +254,14 @@ public class ShoppingListActivity extends ActionBarActivity {
         }
         */
         db.closeDB();
-        return entries;
+        return entriesShopList;
     }
 
     /**
      * add shopping list button
      */
     public void addShoppingList(View view) {
-        Toast.makeText(getApplicationContext(), "Add Shopping List", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Add Shopping List", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, ShoppingListActivity_add.class);
         startActivity(intent);
     }

@@ -38,7 +38,14 @@ public class InventoryAdapter extends ArrayAdapter<Inventory> {
         int unitIdx = entry.getUnit_id();
         DBHelper db = new DBHelper(this.getContext());
         String metric = db.getUnitMeasure((long) unitIdx).getMetric();
-        viewHolder.subTitleView.setText("Quantity:" + entry.getQuantity() + "\tUnitMeasure:" + metric);
+
+        if(entry.getQuantity() < 0) { //shop list display
+            viewHolder.subTitleView.setText("Quantity:" + entry.getQuantity()*-1 + "\tUnitMeasure:" + metric);
+        }else { // inventory display
+            viewHolder.subTitleView.setText("Quantity:" + entry.getQuantity() + "\tUnitMeasure:" + metric);
+        }
+
+
         db.closeDB();
 
         // Setting image view is also simple

@@ -126,9 +126,9 @@ public class InventoryActivity extends ActionBarActivity {
 
                 final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
                 final String item = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         "long clicked " + item + " Position: " + position, Toast.LENGTH_LONG)
-                        .show();
+                        .show();*/
 
                 //popup confirmation delete
                 new AlertDialog.Builder(InventoryActivity.this)
@@ -204,6 +204,14 @@ public class InventoryActivity extends ActionBarActivity {
 
         db = new DBHelper(this);
         final List<Inventory> entries = db.getAllInventories();
+        final List<Inventory> entriesShopInv = new ArrayList<Inventory>();
+        Iterator<Inventory> it = entries.iterator();
+        while(it.hasNext()) {
+            Inventory target = it.next();
+            if(target.getQuantity() >= 0) {
+                entriesShopInv.add(target);
+            }
+        }
         /*
         // mock Entry for testing
         final List<Inventory> entries = new ArrayList<Inventory>();
@@ -213,7 +221,7 @@ public class InventoryActivity extends ActionBarActivity {
         }
         */
         db.closeDB();
-        return entries;
+        return entriesShopInv;
     }
 
     /**
@@ -221,7 +229,7 @@ public class InventoryActivity extends ActionBarActivity {
      * @param view
      */
     public void addInventory(View view) {
-        Toast.makeText(getApplicationContext(), "Add", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Add", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, InventoryActivity_add.class);
         startActivity(intent);
     }

@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Iterator;
+import java.util.List;
+
 
 public class ShoppingListActivity_edit extends ActionBarActivity {
 
@@ -72,15 +75,23 @@ public class ShoppingListActivity_edit extends ActionBarActivity {
         newInventory_quantity_val = getIntent().getIntExtra("quantity",0);
         newInventory_unit_val = getIntent().getIntExtra("unit_id", 0);
 
+        //Switch to positive quantity
+        newInventory_quantity_val *= -1;
 
         //populate the form with value
         EditText n_entry = (EditText) findViewById(R.id.inventoryname);
         EditText quantity_entry = (EditText) findViewById(R.id.inventoryquantity);
-        EditText unitid_entry = (EditText) findViewById(R.id.inventoryunit);
+        EditText unit_entry = (EditText) findViewById(R.id.inventoryunit);
 
         n_entry.setText(newInventory_name_val);
         quantity_entry.setText(newInventory_quantity_val.toString());
-        unitid_entry.setText(newInventory_unit_val.toString());
+
+        // pull up unit from database
+        DBHelper db = new DBHelper(this);
+        String unit = db.getUnitMeasure((long) newInventory_unit_val).getMetric();
+        unit_entry.setText(unit);
+
+        db.closeDB();
     }
 
 
@@ -130,19 +141,89 @@ public class ShoppingListActivity_edit extends ActionBarActivity {
     public void editEntry(View view) {
 
 
+        //Initialize
         Integer newInventory_id_val = null;
         String newInventory_name_val = null;
         Integer newInventory_quantity_val = null;
-        Integer newInventory_unit_val = null;
+        String newInventory_unit_val = null;
 
         newInventory_id_val = getIntent().getIntExtra("id",0);
+        /*
         newInventory_name_val = getIntent().getStringExtra("name");
         newInventory_quantity_val = getIntent().getIntExtra("quantity",0);
         newInventory_unit_val = getIntent().getIntExtra("unit_id", 0);
+        */
 
-        Toast.makeText(getApplicationContext(), "edit Inventory : " + newInventory_id_val + ":" + newInventory_name_val + ":" + newInventory_quantity_val + ":" + newInventory_unit_val, Toast.LENGTH_SHORT).show();
+        //get input from form
+        final TextView newInventory_name = (TextView) findViewById(R.id.inventoryname);
+        final TextView newInventory_quantity = (TextView) findViewById(R.id.inventoryquantity);
+        final TextView newInventory_unit = (TextView) findViewById(R.id.inventoryunit);
 
-        //consistency check before adding
+        //consistency check before edit
+        //name check
+        newInventory_name_val = newInventory_name.getText().toString();
+        if(newInventory_name_val == null || newInventory_name_val.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "invalid name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //quantity check
+        String check = newInventory_quantity.getText().toString();
+        if(check.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "unfilled quantity", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        newInventory_quantity_val = Integer.parseInt(newInventory_quantity.getText().toString());
+        if(newInventory_quantity_val < 0) {
+            Toast.makeText(getApplicationContext(), "invalid quantity", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //unit check
+        newInventory_unit_val = newInventory_unit.getText().toString();
+        if(newInventory_unit_val == null || newInventory_unit_val.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "invalid unit", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //////
+
+        //Toast.makeText(getApplicationContext(), "edit Inventory : " + newInventory_id_val + ":" + newInventory_name_val + ":" + newInventory_quantity_val + ":" + newInventory_unit_val, Toast.LENGTH_SHORT).show();
+
+        //initiate db
+        DBHelper db = new DBHelper(this);
+        //check appropiate Unit
+        List<UnitMeasure> umList = db.getAllUnitMeasure();
+        Iterator<UnitMeasure> it = umList.iterator();
+        boolean isExist = false;
+        int idx = -1;
+        while(it.hasNext()) {
+            UnitMeasure target = it.next();
+            if(target.getMetric().compareToIgnoreCase(newInventory_unit_val) == 0) {
+                isExist = true;
+                idx = target.getId();
+            }
+        }
+
+        //negate quantity
+        newInventory_quantity_val *= -1;
+
+        //edit inventory
+        if(isExist) { //if exist in database
+            //Toast.makeText(getApplicationContext(), "Exist", Toast.LENGTH_SHORT).show();
+            Inventory inv = new Inventory(newInventory_id_val, newInventory_name_val, idx, newInventory_quantity_val);
+            db.updateInventory(inv);
+        } else { // not exist create new UnitMeasure
+            //Toast.makeText(getApplicationContext(), "not Exist", Toast.LENGTH_SHORT).show();
+            UnitMeasure um = new UnitMeasure(newInventory_unit_val);
+            idx = (int) db.createUnitMeasure(um);
+            Inventory inv = new Inventory(newInventory_id_val, newInventory_name_val, idx, newInventory_quantity_val);
+            db.updateInventory(inv);
+        }
+
+        db.closeDB();
+        //go back
+        Intent intent = new Intent(this, ShoppingListActivity.class);
+        startActivity(intent);
 
 
     }
