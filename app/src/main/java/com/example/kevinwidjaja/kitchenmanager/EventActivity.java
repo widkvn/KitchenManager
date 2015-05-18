@@ -92,6 +92,10 @@ public class EventActivity extends ActionBarActivity {
         List<Event> allEvent = db.getAllEvent();
         for (Event event : allEvent){
             Log.d("Event Content", event.toString());        }
+        List<Event> allEventRecipe = db.getAllEvent();
+        for (Event eventrecipe : allEventRecipe){
+            Log.d("Event Recipe Content", eventrecipe.toString());        }
+
         db.close();
 
         date= new Date(System.currentTimeMillis());

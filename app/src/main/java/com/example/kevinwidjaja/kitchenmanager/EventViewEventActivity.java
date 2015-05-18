@@ -1,13 +1,16 @@
 package com.example.kevinwidjaja.kitchenmanager;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +20,9 @@ import java.util.List;
 
 public class EventViewEventActivity extends ActionBarActivity
 {
+    private Toolbar toolbar;
+    private Toolbar toolbar_bottom;
+
     List<EventRecipe> allEventRecipe;
     List<Recipe> allRecipe;
     DBHelper db;
@@ -24,13 +30,54 @@ public class EventViewEventActivity extends ActionBarActivity
     List<Integer> allRecipeIds;
     List<String>  allRecipeNames;
 
+    int event_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_view_event);
 
+        // Main Toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Bottom Toolbar
+        toolbar_bottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+        toolbar_bottom.setTitle("Nav");
+        toolbar_bottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent;
+                switch(item.getItemId()){
+                    case R.id.inventory:
+                        Toast.makeText(getApplicationContext(), "Inventory", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(EventViewEventActivity.this, InventoryActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.shoppinglist:
+                        Toast.makeText(getApplicationContext(), "Shopping List", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(EventViewEventActivity.this, ShoppingListActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.recipe:
+                        Toast.makeText(getApplicationContext(), "Recipe", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(EventViewEventActivity.this, RecipeActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.event:
+                        Toast.makeText(getApplicationContext(), "Event", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(EventViewEventActivity.this, EventActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return true;
+            }
+        });
+        toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
+
         Bundle bundle = getIntent().getExtras();
         String id=bundle.getString("EventID");
+        event_id=Integer.parseInt(id);
 
         //getting EventRecipe content
         db=new DBHelper(this);
@@ -39,7 +86,7 @@ public class EventViewEventActivity extends ActionBarActivity
         allEventRecipe = db.getAllEventRecipe();
         for (EventRecipe eventRecipe : allEventRecipe)
         {
-            if(eventRecipe.getEvent_id()==Integer.parseInt(id))//If event id is found in EventRecipe table
+            if(eventRecipe.getEvent_id()==event_id)//If event id is found in EventRecipe table
             {
                 allRecipeIds.add(eventRecipe.getRecipe_id());
             }
@@ -54,8 +101,37 @@ public class EventViewEventActivity extends ActionBarActivity
                     allRecipeNames.add(recipe.getName());
             }
         }
+        db.close();
         //populate List View
         populate_list_view();
+
+        //Delete Recipe button
+        ImageButton delete_event_button = (ImageButton) findViewById(R.id.deleteEventButton);
+        delete_event_button.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                // Perform action on click
+                db=new DBHelper(EventViewEventActivity.this);
+
+                //Delete corresponding entries in EventRecipe table
+                allEventRecipe = db.getAllEventRecipe();
+
+                for (EventRecipe eventRecipe : allEventRecipe)
+                {
+                    if(eventRecipe.getEvent_id()==event_id)//If event id is found in EventRecipe table
+                    {
+                        db.deleteEventRecipe(eventRecipe.getId());
+                    }
+                }
+
+                //Delete entry from Event table
+                db.deleteEvent((long)event_id);
+                db.close();
+                finish();
+
+            }
+        });
     }
 
 
