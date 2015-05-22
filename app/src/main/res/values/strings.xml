@@ -11,6 +11,13 @@
     <string name="title_activity_shopping_list">Shopping List</string>
     <string name="title_activity_event">Event</string>
     <string name="title_activity_recipe">Recipe</string>
+    <string name="title_activity_recipe_activity_add_recipe">Add Recipe</string>
+    <string name="title_activity_recipe_activity_view_recipe">View Recipe</string>
+    <string name="title_activity_recipe_activity_edit_recipe">Edit Recipe</string>
+    <string name="title_activity_toolbar">ToolbarActivity</string>
+    <string name="title_activity_recipe_add_ingredient">Add Ingredient</string>
+    <string name="title_activity_event_add">EventAddActivity</string>
+    <string name="title_activity_event_view_event">EventViewEventActivity</string>
 
     //inventory add form
     <string name="inventory_name">"Name</string>

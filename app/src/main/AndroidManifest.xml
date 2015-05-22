@@ -30,7 +30,34 @@
         </activity>
         <activity
             android:name=".RecipeActivity"
-            android:label="@string/title_activity_recipe" >
+            android:label="@string/title_activity_recipe"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".RecipeActivityAddRecipe"
+            android:label="@string/title_activity_recipe_activity_add_recipe" >
+        </activity>
+        <activity
+            android:name=".RecipeActivityViewRecipe"
+            android:label="@string/title_activity_recipe_activity_view_recipe" >
+        </activity>
+        <activity
+            android:name=".RecipeActivityEditRecipe"
+            android:label="@string/title_activity_recipe_activity_edit_recipe" >
+        </activity>
+        <activity
+            android:name=".RecipeAddIngredient"
+            android:label="@string/title_activity_recipe_add_ingredient"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".EventAddActivity"
+            android:label="@string/title_activity_event_add"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+        <activity
+            android:name=".EventViewEventActivity"
+            android:label="@string/title_activity_event_view_event" >
         </activity>
         <activity
             android:name=".ShoppingListActivity_add"

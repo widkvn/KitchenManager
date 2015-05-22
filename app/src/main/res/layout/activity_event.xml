@@ -27,10 +27,27 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true" />
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true" />
+        android:src="@android:drawable/ic_input_add"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/toolbar"/>
+
+    <CalendarView
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:id="@+id/calendarView"
+        android:layout_below="@+id/imageButton1"
+        android:layout_centerHorizontal="true"
+        />
+    <!-- List View -->
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="130dp"
+        android:layout_below="@id/calendarView"/>
+
 
 </RelativeLayout>

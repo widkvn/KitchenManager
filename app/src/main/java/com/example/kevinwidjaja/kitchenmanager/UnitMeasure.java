@@ -3,7 +3,8 @@ package com.example.kevinwidjaja.kitchenmanager;
 /** Unit measure Model class
  * Created by kevinwidjaja on 3/30/15.
  */
-public class UnitMeasure {
+public class UnitMeasure
+{
 
     //private variables
     private int id;

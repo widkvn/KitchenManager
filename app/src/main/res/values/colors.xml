@@ -7,5 +7,7 @@
     <color name="eventbg">#D6ECA6</color>
 
     <color name="homescreen">#66ff66</color>
+    <color name="transparent" type="color">#00FFFFFF</color>
+
 
 </resources>
