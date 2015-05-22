@@ -52,6 +52,7 @@ public class RecipeAddIngredient extends ActionBarActivity {
 
     int is_new_ingredient;
     String ingredient_name;
+    int unit_id,found_id;
 
 
     @Override
@@ -98,6 +99,7 @@ public class RecipeAddIngredient extends ActionBarActivity {
         toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
 
         is_new_ingredient=1;
+        found_id=0;
 
         db = new DBHelper(this);
 
@@ -288,6 +290,28 @@ public class RecipeAddIngredient extends ActionBarActivity {
         quantity=qty.getText().toString();
         unt=unit.getText().toString();
 
+        //check unit table if same unit exists, if yes, get that id from unit table and use that id to store in inventory
+        // table. If no, save that id and other details in unit table
+
+        List<UnitMeasure> allUnitMeasure = db.getAllUnitMeasure();
+        for (UnitMeasure unitMeasure : allUnitMeasure)
+        {
+            if(unitMeasure.getMetric().equals(unt))//unit already exists
+            {
+
+                unit_id=unitMeasure.getId();
+                found_id=1;
+                break;
+            }
+
+        }
+        if(found_id==0) //Create new entry in UnitMeasure table
+        {
+            UnitMeasure unitMeasure1 = new UnitMeasure(unt);
+            unit_id = (int)(db.createUnitMeasure(unitMeasure1));
+
+        }
+
         //Check if ingredient name entered already exists in inventory table
         allInventory = db.getAllInventories();
         for (Inventory inventory : allInventory)
@@ -303,12 +327,18 @@ public class RecipeAddIngredient extends ActionBarActivity {
             //Else, ingredient is created as a new row in Inventory table
         if(found_ingredient ==0)
             {
-                Inventory new_inventory = new Inventory(name,Integer.parseInt(unt),0);
+                Inventory new_inventory = new Inventory(name,unit_id,0);
                 inventory_id=db.createInventory(new_inventory);
             }
             //Inventory row has been updated/created. Now, creating inventory-recipe row.
             RecipeInventory recipeInventory = new RecipeInventory(temp_recipe_id,(int)inventory_id,Integer.parseInt(quantity));
             long recipeInventory_id = db.createRecipeInventory(recipeInventory);
+
+        allUnitMeasure = db.getAllUnitMeasure();
+        for (UnitMeasure unitMeasure : allUnitMeasure)
+        {
+            Log.d("UnitMeasure Metric", unitMeasure.getMetric());
+        }
 
         db.close();
 

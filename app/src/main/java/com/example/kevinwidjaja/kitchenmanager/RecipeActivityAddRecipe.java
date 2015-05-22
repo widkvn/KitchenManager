@@ -82,6 +82,12 @@ public class RecipeActivityAddRecipe extends ActionBarActivity {
 
         db = new DBHelper(this);
 
+        List<UnitMeasure> allUnitMeasure = db.getAllUnitMeasure();
+        for (UnitMeasure unitMeasure : allUnitMeasure)
+        {
+            Log.d("UnitMeasure", unitMeasure.getMetric());
+        }
+
         //Getting temporary recipe id from recipe activity
         Bundle extras = getIntent().getExtras();
         recipe_id=extras.getString("Recipe Id");
