@@ -69,11 +69,13 @@ public class ShoppingListActivity_edit extends ActionBarActivity {
         String newInventory_name_val = null;
         Integer newInventory_quantity_val = null;
         Integer newInventory_unit_val = null;
+        Integer newInventory_quantity_val_req = null;
 
-        newInventory_id_val = getIntent().getIntExtra("id",0);
+        newInventory_id_val = getIntent().getIntExtra("id", 0);
         newInventory_name_val = getIntent().getStringExtra("name");
-        newInventory_quantity_val = getIntent().getIntExtra("quantity",0);
+        newInventory_quantity_val = getIntent().getIntExtra("quantity", 0);
         newInventory_unit_val = getIntent().getIntExtra("unit_id", 0);
+        newInventory_quantity_val_req = getIntent().getIntExtra("quantity_req",0);
 
         //Switch to positive quantity
         newInventory_quantity_val *= -1;
@@ -84,7 +86,7 @@ public class ShoppingListActivity_edit extends ActionBarActivity {
         EditText unit_entry = (EditText) findViewById(R.id.inventoryunit);
 
         n_entry.setText(newInventory_name_val);
-        quantity_entry.setText(newInventory_quantity_val.toString());
+        quantity_entry.setText(newInventory_quantity_val_req.toString());
 
         // pull up unit from database
         DBHelper db = new DBHelper(this);
@@ -204,19 +206,25 @@ public class ShoppingListActivity_edit extends ActionBarActivity {
             }
         }
 
-        //negate quantity
-        newInventory_quantity_val *= -1;
-
+        Inventory inv = null;
         //edit inventory
         if(isExist) { //if exist in database
             //Toast.makeText(getApplicationContext(), "Exist", Toast.LENGTH_SHORT).show();
-            Inventory inv = new Inventory(newInventory_id_val, newInventory_name_val, idx, newInventory_quantity_val);
+            inv = db.getInventory(newInventory_id_val);
+
+            inv.setName(newInventory_name_val);
+            inv.setQuantity_req(newInventory_quantity_val);
+            inv.setUnit_id(idx);
             db.updateInventory(inv);
         } else { // not exist create new UnitMeasure
             //Toast.makeText(getApplicationContext(), "not Exist", Toast.LENGTH_SHORT).show();
+            inv = db.getInventory(newInventory_id_val);
             UnitMeasure um = new UnitMeasure(newInventory_unit_val);
             idx = (int) db.createUnitMeasure(um);
-            Inventory inv = new Inventory(newInventory_id_val, newInventory_name_val, idx, newInventory_quantity_val);
+
+            inv.setName(newInventory_name_val);
+            inv.setQuantity_req(newInventory_quantity_val);
+            inv.setUnit_id(idx);
             db.updateInventory(inv);
         }
 

@@ -172,7 +172,7 @@ public class InventoryActivity_edit extends ActionBarActivity {
             return;
         }
         newInventory_quantity_val = Integer.parseInt(newInventory_quantity.getText().toString());
-        if(newInventory_quantity_val < 0) {
+        if(newInventory_quantity_val <= 0) {
             Toast.makeText(getApplicationContext(), "invalid quantity", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -201,16 +201,26 @@ public class InventoryActivity_edit extends ActionBarActivity {
                 idx = target.getId();
             }
         }
+
+        Inventory inv = null;
         //edit inventory
         if(isExist) { //if exist in database
            //Toast.makeText(getApplicationContext(), "Exist", Toast.LENGTH_SHORT).show();
-            Inventory inv = new Inventory(newInventory_id_val, newInventory_name_val, idx, newInventory_quantity_val);
+            inv = db.getInventory(newInventory_id_val);
+
+            inv.setName(newInventory_name_val);
+            inv.setQuantity(newInventory_quantity_val);
+            inv.setUnit_id(idx);
             db.updateInventory(inv);
         } else { // not exist create new UnitMeasure
             //Toast.makeText(getApplicationContext(), "not Exist", Toast.LENGTH_SHORT).show();
+            inv = db.getInventory(newInventory_id_val);
             UnitMeasure um = new UnitMeasure(newInventory_unit_val);
             idx = (int) db.createUnitMeasure(um);
-            Inventory inv = new Inventory(newInventory_id_val, newInventory_name_val, idx, newInventory_quantity_val);
+
+            inv.setName(newInventory_name_val);
+            inv.setQuantity(newInventory_quantity_val);
+            inv.setUnit_id(idx);
             db.updateInventory(inv);
         }
 

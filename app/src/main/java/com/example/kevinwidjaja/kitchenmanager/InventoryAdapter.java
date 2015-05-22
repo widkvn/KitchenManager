@@ -39,11 +39,14 @@ public class InventoryAdapter extends ArrayAdapter<Inventory> {
         DBHelper db = new DBHelper(this.getContext());
         String metric = db.getUnitMeasure((long) unitIdx).getMetric();
 
+        /*
         if(entry.getQuantity() < 0) { //shop list display
             viewHolder.subTitleView.setText("Quantity:" + entry.getQuantity()*-1 + "\tUnitMeasure:" + metric);
         }else { // inventory display
             viewHolder.subTitleView.setText("Quantity:" + entry.getQuantity() + "\tUnitMeasure:" + metric);
         }
+        */
+        viewHolder.subTitleView.setText("Have/Need:" + entry.getQuantity() + "/" + entry.getQuantity_req() + "\tUnitMeasure:" + metric);
 
 
         db.closeDB();

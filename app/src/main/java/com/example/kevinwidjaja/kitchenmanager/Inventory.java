@@ -10,6 +10,7 @@ public class Inventory {
     private String name;
     private int unit_id;
     private int quantity;
+    private int quantity_req;
 
     //constructor
     public Inventory(){
@@ -19,6 +20,7 @@ public class Inventory {
         this.name = name;
         this.unit_id = unit_id;
         this.quantity = quantity;
+        this.quantity_req = 0;
     }
 
     public Inventory(int id, String name, int unit_id, int quantity){
@@ -26,6 +28,22 @@ public class Inventory {
         this.name = name;
         this.unit_id = unit_id;
         this.quantity = quantity;
+        this.quantity_req = 0;
+    }
+
+    public Inventory(String name, int unit_id, int quantity, int quantity_req){
+        this.name = name;
+        this.unit_id = unit_id;
+        this.quantity = quantity;
+        this.quantity_req = quantity_req;
+    }
+
+    public Inventory(int id, String name, int unit_id, int quantity, int quantity_req){
+        this.id = id;
+        this.name = name;
+        this.unit_id = unit_id;
+        this.quantity = quantity;
+        this.quantity_req = quantity_req;
     }
 
     //setters
@@ -45,6 +63,10 @@ public class Inventory {
         this.quantity = quantity;
     }
 
+    public void setQuantity_req(int quantity_req) {
+        this.quantity_req = quantity_req;
+    }
+
     //getters
     public int getId(){
         return this.id;
@@ -60,6 +82,10 @@ public class Inventory {
 
     public int getQuantity(){
         return this.quantity;
+    }
+
+    public int getQuantity_req() {
+        return this.quantity_req;
     }
 
     //Print

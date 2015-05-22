@@ -110,6 +110,7 @@ public class ShoppingListActivity extends ActionBarActivity {
                 localbundle.putInt("id",pointer.getId());
                 localbundle.putInt("quantity",pointer.getQuantity());
                 localbundle.putInt("unit_id",pointer.getUnit_id());
+                localbundle.putInt("quantity_req",pointer.getQuantity_req());
                 Intent intent = new Intent(ShoppingListActivity.this, ShoppingListActivity_edit.class);
                 intent.putExtras(localbundle);
                 startActivity(intent);
@@ -138,14 +139,15 @@ public class ShoppingListActivity extends ActionBarActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                Toast.makeText(ShoppingListActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(ShoppingListActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
 
                                 /*
                                 //removing from database
                                 db.deleteInventory(pointer.getId());*/
 
-                                //Move to Inventory by making the quantity positive
-                                pointer.setQuantity(pointer.getQuantity()*-1);
+                                //Move to Inventory
+                                pointer.setQuantity(pointer.getQuantity()+pointer.getQuantity_req());
+                                pointer.setQuantity_req(0);
                                 db.updateInventory(pointer);
 
                                 //removing from adapter view only (not including item in database)
@@ -241,7 +243,7 @@ public class ShoppingListActivity extends ActionBarActivity {
         Iterator<Inventory> it = entries.iterator();
         while(it.hasNext()) {
             Inventory target = it.next();
-            if(target.getQuantity() < 0) {
+            if(target.getQuantity_req() > 0) {
                 entriesShopList.add(target);
             }
         }

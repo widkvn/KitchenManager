@@ -140,7 +140,9 @@ public class InventoryActivity extends ActionBarActivity {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Toast.makeText(InventoryActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                                 //removing from database
-                                db.deleteInventory(pointer.getId());
+                                //db.deleteInventory(pointer.getId());
+                                pointer.setQuantity(0);
+                                db.updateInventory(pointer);
 
                                 //removing from adapter view only (not including item in database)
                                 inventoryAdapter.remove(pointer);
@@ -208,7 +210,7 @@ public class InventoryActivity extends ActionBarActivity {
         Iterator<Inventory> it = entries.iterator();
         while(it.hasNext()) {
             Inventory target = it.next();
-            if(target.getQuantity() >= 0) {
+            if(target.getQuantity() > 0) {
                 entriesShopInv.add(target);
             }
         }

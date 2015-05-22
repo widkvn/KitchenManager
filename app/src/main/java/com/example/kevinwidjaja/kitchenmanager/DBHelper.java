@@ -67,6 +67,7 @@ public class DBHelper extends SQLiteOpenHelper{
     //name column - defined common
     private static final String KEY_UNIT_ID = "unit_id";
     //quantity column - defined common
+    private static final String KEY_QUANTITY_REQ = "quantity_req";
 
     // ------------------- Picture link table - column names
     //id column - defined common
@@ -124,7 +125,8 @@ public class DBHelper extends SQLiteOpenHelper{
             + KEY_ID + " INTEGER PRIMARY KEY,"
             + KEY_NAME + " TEXT,"
             + KEY_UNIT_ID + " INTEGER,"
-            + KEY_QUANTITY + " INTEGER"
+            + KEY_QUANTITY + " INTEGER,"
+            + KEY_QUANTITY_REQ + " INTEGER"
             + ")";
 
     //Picture link table create statement
@@ -218,6 +220,7 @@ public class DBHelper extends SQLiteOpenHelper{
         values.put(KEY_NAME, inventory.getName());
         values.put(KEY_UNIT_ID, inventory.getUnit_id());
         values.put(KEY_QUANTITY, inventory.getQuantity());
+        values.put(KEY_QUANTITY_REQ, inventory.getQuantity_req());
 
         //insert row
         long inventory_id = db.insert(TABLE_INVENTORY, null, values);
@@ -247,6 +250,7 @@ public class DBHelper extends SQLiteOpenHelper{
         inventory.setName(c.getString(c.getColumnIndex(KEY_NAME)));
         inventory.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
         inventory.setUnit_id(c.getInt(c.getColumnIndex(KEY_UNIT_ID)));
+        inventory.setQuantity_req(c.getInt(c.getColumnIndex(KEY_QUANTITY_REQ)));
 
         return inventory;
     }
@@ -272,6 +276,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 inventory.setName(c.getString(c.getColumnIndex(KEY_NAME)));
                 inventory.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
                 inventory.setUnit_id(c.getInt(c.getColumnIndex(KEY_UNIT_ID)));
+                inventory.setQuantity_req(c.getInt(c.getColumnIndex(KEY_QUANTITY_REQ)));
 
                 // adding to inventories
                 inventories.add(inventory);
@@ -290,6 +295,7 @@ public class DBHelper extends SQLiteOpenHelper{
         values.put(KEY_NAME, inventory.getName());
         values.put(KEY_UNIT_ID, inventory.getUnit_id());
         values.put(KEY_QUANTITY, inventory.getQuantity());
+        values.put(KEY_QUANTITY_REQ, inventory.getQuantity_req());
 
         //updating row
         return db.update(TABLE_INVENTORY, values,

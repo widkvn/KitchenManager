@@ -164,20 +164,49 @@ public class ShoppingListActivity_add extends ActionBarActivity {
         }
 
         //negate quantity
-        newInventory_quantity_val *= -1;
+        //newInventory_quantity_val *= -1;
 
+        Inventory inv = null;
         //adding inventory
         if(isExist) { //if exist in database
+
             //Toast.makeText(getApplicationContext(), "Exist", Toast.LENGTH_SHORT).show();
-            Inventory inv = new Inventory(newInventory_name_val, idx, newInventory_quantity_val);
-            db.createInventory(inv);
+            inv = new Inventory(newInventory_name_val, idx, 0);
+            //db.createInventory(inv);
+
         } else { // not exist create new UnitMeasure
+
             //Toast.makeText(getApplicationContext(), "not Exist", Toast.LENGTH_SHORT).show();
             UnitMeasure um = new UnitMeasure(newInventory_unit_val);
             idx = (int) db.createUnitMeasure(um);
-            Inventory inv = new Inventory(newInventory_name_val, idx, newInventory_quantity_val);
+            inv = new Inventory(newInventory_name_val, idx, 0);
+            //db.createInventory(inv);
+
+        }
+
+        //need to check whether such inventory exist, if such exist update quantity_req otherwise create new entry
+        List<Inventory> allInv = db.getAllInventories();
+        Iterator<Inventory> itI = allInv.iterator();
+        boolean invExist = false;
+        int idxI = -1;
+        while(itI.hasNext()) {
+            Inventory target = itI.next();
+            if(inv.getName().compareToIgnoreCase(target.getName()) == 0) {
+                invExist = true;
+                idxI = target.getId();
+            }
+        }
+
+        if(invExist) {
+            inv = db.getInventory((long)idxI);
+            inv.setQuantity_req(newInventory_quantity_val);
+            db.updateInventory(inv);
+        }else {
+            inv.setQuantity_req(newInventory_quantity_val);
             db.createInventory(inv);
         }
+
+
 
         db.closeDB();
         //go back
