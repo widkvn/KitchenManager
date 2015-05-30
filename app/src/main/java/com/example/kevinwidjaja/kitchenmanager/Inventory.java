@@ -90,7 +90,7 @@ public class Inventory {
 
     //Print
     public String toString(){
-        return this.getId() + "," + this.getName() + "," + this.getUnit_id() + "," + this.getQuantity();
+        return this.getId() + "," + this.getName() + "," + this.getUnit_id() + "," + this.getQuantity()+ "," +this.getQuantity_req();
     }
 
     public String toStringList(){

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,14 @@ public class ShoppingListActivity extends ActionBarActivity {
     private Toolbar toolbar_bottom;
 
     DBHelper db;
+
+    // List view
+    private ListView lv;
+    // Listview Adapter
+    ArrayAdapter<String> adapter;
+    List<Inventory> allShoppingListItems;
+    List<UnitMeasure> allUnitMeasure;
+    List<String> stringShoppingList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,120 +83,56 @@ public class ShoppingListActivity extends ActionBarActivity {
         });
         toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
 
+        //ListView
+        lv = (ListView) findViewById(R.id.list_view);
 
-        //Initiate DB
-        db = new DBHelper(this);
+        // Adding items to listview
+        populate_listview();
+    }
 
-        //Display List View
-        // Setup the list view
-        final ListView newsEntryListView = (ListView) findViewById(R.id.shoppinglist_listView);
-        final InventoryAdapter inventoryAdapter = new InventoryAdapter(this, R.layout.activity_shopping_list_listitem);
-        newsEntryListView.setAdapter(inventoryAdapter);
+    public void populate_listview()
+    {
+        Log.v("SLA","Hi");
+        db= new DBHelper(this);
+        allShoppingListItems=db.getAllInventories();
+        allUnitMeasure=db.getAllUnitMeasure();
+        stringShoppingList=new ArrayList<String>();
+        int shop_qty=0;
+        String unit_name="";
+        for (Inventory inventory : allShoppingListItems)
+        {
+            Log.v("SLAInventory", inventory.toString());
+            shop_qty=(inventory.getQuantity_req()-inventory.getQuantity());
+            for(UnitMeasure unitMeasure : allUnitMeasure)
+            {
+                if(unitMeasure.getId()==inventory.getUnit_id())
+                    unit_name =unitMeasure.getMetric();
+            }
+            if(shop_qty>0)
+            {
+                stringShoppingList.add(inventory.getName() + "\t\t\t"+String.valueOf(shop_qty) +" "+ unit_name);
+            }
+        }
+        for(int i=0;i<stringShoppingList.size();i++)
+        {
 
-
-        // Populate the list, through the adapter
-        for(final Inventory entry : getInventoryEntries()) {
-            inventoryAdapter.add(entry);
+            Log.v("SLA", stringShoppingList.get(i));
         }
 
-        // ListView Click listener; go to edit activity
-        newsEntryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,stringShoppingList );
+        lv.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        //Edit/View Shopping List
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
-                final String item = parent.getItemAtPosition(position).toString();
-                /*
-                Toast.makeText(getApplicationContext(),
-                        "clicked " + item + " Position: " + position , Toast.LENGTH_LONG)
-                        .show();*/
-
-
-                //bundle to pass value to another activity
-                Bundle localbundle = new Bundle();
-                localbundle.putString("name",pointer.getName());
-                localbundle.putInt("id",pointer.getId());
-                localbundle.putInt("quantity",pointer.getQuantity());
-                localbundle.putInt("unit_id",pointer.getUnit_id());
-                localbundle.putInt("quantity_req",pointer.getQuantity_req());
-                Intent intent = new Intent(ShoppingListActivity.this, ShoppingListActivity_edit.class);
-                intent.putExtras(localbundle);
-                startActivity(intent);
-
+            public void onItemClick(AdapterView<?> parent, View view,int position, long id)
+            {
 
             }
         });
 
-        // ListView Long Click listener with remove implementation
-        newsEntryListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           int position, long id) {
-
-                final Inventory pointer = (Inventory) parent.getItemAtPosition(position);
-                final String item = parent.getItemAtPosition(position).toString();
-                /*Toast.makeText(getApplicationContext(),
-                        "long clicked " + item + " Position: " + position, Toast.LENGTH_LONG)
-                        .show();*/
-
-                //popup confirmation delete
-                new AlertDialog.Builder(ShoppingListActivity.this)
-                        .setTitle("Move to Inventory")
-                        .setMessage("Do you really want to move " + pointer.getName() + " ?")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                //Toast.makeText(ShoppingListActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
-
-                                /*
-                                //removing from database
-                                db.deleteInventory(pointer.getId());*/
-
-                                //Move to Inventory
-                                pointer.setQuantity(pointer.getQuantity()+pointer.getQuantity_req());
-                                pointer.setQuantity_req(0);
-                                db.updateInventory(pointer);
-
-                                //removing from adapter view only (not including item in database)
-                                inventoryAdapter.remove(pointer);
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null).show();
-
-                return true;
-            }
-        });
-
-
-        /*
-        // NOT IMPLEMENTED YET
-        //SearchBox implementation
-        InventoryAdapter adapterSearch = new InventoryAdapter(this, android.R.layout.simple_dropdown_item_1line);
-
-        AutoCompleteTextView searchItems = (AutoCompleteTextView) findViewById(R.id.searchItem);
-        searchItems.setAdapter(adapterSearch);
-        /////////////
-        */
-
-        //SearchBox implementation
-        /*
-        ArrayAdapter<String> adapterSearch = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, values);
-
-        AutoCompleteTextView searchItems = (AutoCompleteTextView) findViewById(R.id.searchItem);
-        searchItems.setAdapter(adapterSearch);
-
-
-        String selectQuery = "SELECT * FROM "
-                + "inventories";
-        Cursor searchCursor = db.rawQuery(selectQuery);
-        CursorAdapter adapterSearch = new SimpleCursorAdapter(this,searchCursor,true);
-        SearchView searchItems = (SearchView) findViewById(R.id.searchItem);
-        searchItems.setSuggestionsAdapter(adapterSearch);
-
-        */
+        db.close();
     }
 
 
@@ -231,6 +176,7 @@ public class ShoppingListActivity extends ActionBarActivity {
 
     }
 
+  /*
     private List<Inventory> getInventoryEntries() {
 
         // Let's setup some test data.
@@ -241,24 +187,19 @@ public class ShoppingListActivity extends ActionBarActivity {
         final List<Inventory> entries = db.getAllInventories();
         final List<Inventory> entriesShopList = new ArrayList<Inventory>();
         Iterator<Inventory> it = entries.iterator();
+
+
         while(it.hasNext()) {
-            Inventory target = it.next();
-            if(target.getQuantity_req() > 0) {
+            target = it.next();
+            if((target.getQuantity_req()-target.getQuantity()) > 0) {
                 entriesShopList.add(target);
             }
         }
-        /*
-        // mock Entry for testing
-        final List<Inventory> entries = new ArrayList<Inventory>();
 
-        for(int i = 1; i < 50; i++) {
-            entries.add(new Inventory(i,"Test Entry " + i, i, i));
-        }
-        */
         db.closeDB();
         return entriesShopList;
     }
-
+*/
     /**
      * add shopping list button
      */

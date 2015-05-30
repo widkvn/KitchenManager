@@ -38,6 +38,7 @@
         android:layout_marginTop="10dp"/>
 
     <!-- Editext for Number of Servings -->
+    <!--
     <EditText android:id="@+id/servings"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
@@ -47,16 +48,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
        />
-
+-->
     <!-- Editext for Procedure -->
     <EditText android:id="@+id/procedure"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:hint="Procedure"
         android:inputType="textMultiLine"
-        android:layout_below="@+id/servings"
+        android:layout_below="@+id/addIngredientButton"
         android:background="@drawable/edittext_box"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:singleLine="false"/>
 
@@ -69,7 +70,8 @@
         android:text="Add Recipe"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/procedure"
+        android:layout_above="@+id/toolbar_bottom"
+
          />
 
     <!--Cancel recipe Button -->
@@ -81,7 +83,8 @@
         android:layout_alignTop="@+id/addRecipeButton"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/procedure"/>
+        android:layout_above="@+id/toolbar_bottom"
+        />
 
     <Button
         android:layout_width="wrap_content"
@@ -89,7 +92,8 @@
         android:text="Add Ingredients"
         android:id="@+id/addIngredientButton"
         android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
 
     <TextView
         android:layout_width="wrap_content"

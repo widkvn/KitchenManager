@@ -30,9 +30,13 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
     TextView text;
     List<Inventory> allInventory;
     List<RecipeInventory> allRecipeInventory;
+    List<UnitMeasure> allUnitMeasure;
+
     List<String> InventoryNameList;
     List<Integer> InventoryQtyList;
     List<Integer> InventoryUnitList;
+
+    String unit_name;
 
 
     @Override
@@ -170,6 +174,7 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
 
         String textview_list="Ingredients\n\n";
 
+
         for (RecipeInventory recipeInventory : allRecipeInventory)
         {
             if(recipeInventory.getRecipe_id()==recipe_id)
@@ -183,7 +188,17 @@ public class RecipeActivityViewRecipe extends ActionBarActivity {
                     {
                         InventoryNameList.add(inventory.getName());
                         InventoryUnitList.add(inventory.getUnit_id());
-                        textview_list=textview_list+inventory.getName()+"\t"+recipeInventory.getQuantity()+"\t"+inventory.getUnit_id()+"\n";
+
+                        allUnitMeasure=db.getAllUnitMeasure();
+                        for (UnitMeasure unitMeasure : allUnitMeasure)
+                        {
+                            if (unitMeasure.getId() == inventory.getUnit_id())
+                            {
+                                unit_name=unitMeasure.getMetric();
+                                break;
+                            }
+                        }
+                        textview_list=textview_list+inventory.getName()+"\t"+recipeInventory.getQuantity()+"\t"+unit_name+"\n";
                     }
                 }
 

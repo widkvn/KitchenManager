@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -19,29 +20,46 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
-public class EventActivity extends ActionBarActivity {
-
+public class EventActivity extends ActionBarActivity
+{
     private Toolbar toolbar;
     private Toolbar toolbar_bottom;
 
     CalendarView calendar;
     Calendar calendar_var;
     int chosen_year,chosen_month,chosen_day;
-    Date date;
+    Date date,startDate,endDate;
+
     SimpleDateFormat sdf1;
     SimpleDateFormat sdf2;
-    String sDate,sDate2;
+    String sDate,sDate2,sStartDate,sEndDate;
 
 
     DBHelper db;
     List<Event> allEvent;
+    List<EventRecipe> allEventRecipe;
+    List<RecipeInventory> allRecipeInventory;
+    List<Inventory> allInventory;
+
 
     List<String> event_names;
 
     long event_id;//to store the event id that gets passed to EventViewActivity
+
+    //Update Shopping List variables
+    List<Integer> weekly_eventIds;
+    List<Integer> weekly_recipeIds;
+    List<Integer> weekly_inventoryIds;
+    List<Integer> weekly_inventoryQtys;
+
+    Hashtable<Integer,Integer> itemAndQuantity = new Hashtable<Integer,Integer>();
+
 
 
     @Override
@@ -87,20 +105,22 @@ public class EventActivity extends ActionBarActivity {
         });
         toolbar_bottom.inflateMenu(R.menu.menu_bottomnav);
 
+        weekly_eventIds=new ArrayList<Integer>();
+        weekly_recipeIds=new ArrayList<Integer>();
+        weekly_inventoryIds=new ArrayList<Integer>();
+        weekly_inventoryQtys=new ArrayList<Integer>();
+
         //Log contents of Events table
         db=new DBHelper(this);
-        List<Event> allEvent = db.getAllEvent();
-        for (Event event : allEvent){
-            Log.d("Event Content", event.toString());        }
-        List<Event> allEventRecipe = db.getAllEvent();
-        for (Event eventrecipe : allEventRecipe){
-            Log.d("Event Recipe Content", eventrecipe.toString());        }
+        allEvent = db.getAllEvent();
+        allEventRecipe = db.getAllEventRecipe();
 
         db.close();
 
-        date= new Date(System.currentTimeMillis());
+        date=new Date(System.currentTimeMillis());
+        startDate= new Date(System.currentTimeMillis());
         sdf1 = new SimpleDateFormat("MM/dd/yyyy");
-        sDate= sdf1.format(date);
+        sStartDate= sdf1.format(startDate);
 
         //initializes the calendarview
         initializeCalendar();
@@ -110,6 +130,17 @@ public class EventActivity extends ActionBarActivity {
 
         //On clicking Add Button
         addNewEvent();
+
+        //On clicking generate shopping list button
+        Button shopping_button = (Button) findViewById(R.id.generateSL);
+        shopping_button.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                // Perform action on click
+                generateSL();
+            }
+        });
 
     }
 
@@ -154,6 +185,131 @@ public class EventActivity extends ActionBarActivity {
 
     }
 
+    public void generateSL()
+    {
+        int new_qty=0;
+        db=new DBHelper(this);
+        allEvent = db.getAllEvent();
+        allEventRecipe=db.getAllEventRecipe();
+        allRecipeInventory = db.getAllRecipeInventory();
+        allInventory = db.getAllInventories();
+
+        weekly_eventIds.clear();
+        weekly_recipeIds.clear();
+        weekly_inventoryIds.clear();
+        weekly_inventoryQtys.clear();
+        itemAndQuantity.clear();
+
+        date=new Date(System.currentTimeMillis());
+        //Log all dates in the upcoming 7 days
+
+
+        //Go through Events table. For each date which is between today and today=7, get id.
+        for (Event event : allEvent)
+        {
+
+            if(isWithinRange(event.getDate()))
+            {
+                //Store event ids in EventIds List
+
+                weekly_eventIds.add(event.getId());
+            }
+        }
+        //Log check
+        for(int i=0;i<weekly_eventIds.size();i++)
+        {
+            Log.v("EA weeklyEids",String.valueOf(weekly_eventIds.get(i)));
+        }
+        //For loop through EventRecipe table and retrieve and store in RecipeIdsList.
+        for (EventRecipe eventRecipe : allEventRecipe)
+        {
+            if(weekly_eventIds.contains(eventRecipe.getEvent_id()))
+            {
+                weekly_recipeIds.add(eventRecipe.getRecipe_id());
+            }
+
+        }
+        //Log check
+        for(int i=0;i<weekly_recipeIds.size();i++)
+        {
+            Log.v("EventActivity Rids",String.valueOf(weekly_recipeIds.get(i)));
+        }
+
+        //For loop through RecipeInventory table and for each id=id in RecipeIdsList, create an entry InventoryID, Qty in Item hashtable
+        for(int i=0;i<weekly_recipeIds.size();i++)
+        {
+            for (RecipeInventory recipeInventory : allRecipeInventory)
+            {
+                Log.v("RecipeInventory Content", recipeInventory.toString());
+                if (weekly_recipeIds.get(i) == recipeInventory.getRecipe_id())
+                {
+                /*
+                weekly_inventoryIds.add(recipeInventory.getInventory_id());
+                weekly_inventoryQtys.add(recipeInventory.getQuantity());
+                */
+                    if (itemAndQuantity.containsKey(recipeInventory.getInventory_id()))
+                    {
+                        Log.v("EA", "Found Iid again");
+                        new_qty = itemAndQuantity.get(recipeInventory.getInventory_id()) + recipeInventory.getQuantity();
+                        itemAndQuantity.put(recipeInventory.getInventory_id(), new_qty);
+                        new_qty = 0;
+                    }
+                    else
+                    {
+                        Log.v("EA", "Found Iid ");
+                        itemAndQuantity.put(recipeInventory.getInventory_id(), recipeInventory.getQuantity());
+                    }
+                }
+            }
+        }
+        //Log check
+        Iterator it = itemAndQuantity.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry pair = (Map.Entry) it.next();
+            Log.v("EAitem&Qty key",String.valueOf(pair.getKey()));
+            Log.v("EAitem&Qty value",String.valueOf(pair.getValue()));
+        }
+        //For loop through Inventory and for each item where InventoryID==id, make qty_req=Qty in Inventory-Qty in Item.
+        int qty_req=0;
+
+        for (Inventory inventory : allInventory)
+        {
+            if(itemAndQuantity.containsKey(inventory.getId()))
+            {
+                qty_req=itemAndQuantity.get(inventory.getId());
+                inventory.setQuantity_req(qty_req);
+                db.updateInventory(inventory);
+            }
+        }
+        for (Inventory inventory : allInventory)
+        {
+
+            Log.v("EventActivity_qtyReq",String.valueOf(inventory.getQuantity_req()));
+        }
+
+    }
+
+    //Function to check if date is within this upcoming week( 7 days including today )
+    public boolean isWithinRange(Date testDate)
+    {
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        startDate = cal.getTime();
+        cal.add(Calendar.DATE, 7); // 7 is the days you want to add or subtract
+        endDate = cal.getTime();
+        sEndDate= sdf1.format(endDate);
+        String sTestDate=sdf1.format(testDate);
+        Log.v("EA TestDate",sTestDate);
+        Log.v("EA StartDate",sStartDate);
+        Log.v("EA EndDate",sEndDate);
+        Log.v("EA isAfterStart",String.valueOf(testDate.compareTo(startDate)));
+        Log.v("EA isBeforeEnd",String.valueOf(testDate.compareTo(endDate))+"\n");
+        return ( (testDate.compareTo(startDate)>=0) && (testDate.compareTo(endDate)<=0) );
+        //return !(testDate.before(startDate) || testDate.after(endDate));
+    }
+
     //initializes the calendarview
     public void initializeCalendar()
     {
@@ -193,12 +349,12 @@ public class EventActivity extends ActionBarActivity {
         */
         db=new DBHelper(this);
         allEvent = db.getAllEvent();
-        Log.v("EventActivity date",sDate);
+
         for (Event event : allEvent)
         {
             sdf2 = new SimpleDateFormat("MM/dd/yyyy");
             sDate2= sdf1.format(event.getDate());
-            Log.v("EventActivityEventDate",sDate2);
+
             if(date.compareTo(event.getDate())==0)
             {
                 event_names.add(event.getTitle());
@@ -272,4 +428,6 @@ public class EventActivity extends ActionBarActivity {
         super.onResume();
         populate_list_view();
     }
+
+
 }

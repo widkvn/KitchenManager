@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecipeAddIngredient extends ActionBarActivity {
+public class RecipeAddIngredient extends ActionBarActivity
+{
 
     private Toolbar toolbar;
     private Toolbar toolbar_bottom;
@@ -53,6 +54,9 @@ public class RecipeAddIngredient extends ActionBarActivity {
     int is_new_ingredient;
     String ingredient_name;
     int unit_id,found_id;
+
+    List<UnitMeasure> allUnitMeasure;
+    String unit_metric;
 
 
     @Override
@@ -107,6 +111,9 @@ public class RecipeAddIngredient extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         recipe_id=extras.getString("Recipe Id");
         temp_recipe_id=Integer.parseInt(recipe_id);
+
+        qty=(EditText)findViewById(R.id.ingredientQty);
+        unit=(EditText)findViewById(R.id.ingredientUnit);
 
         ingredientName=(EditText)findViewById(R.id.ingredientName);
         ingredientName.setVisibility(View.GONE);
@@ -237,6 +244,30 @@ public class RecipeAddIngredient extends ActionBarActivity {
                     is_new_ingredient=0;
                     ingredient_name=stringInventoryList.get(arg2);
                     ingredientName.setVisibility(View.GONE);
+                    //Set unit to be the unit as that of the item selected
+                    //Go into Inventory table & retrieve corresponding unit id. Go into unit table and get corresponding metric
+                    db=new DBHelper(RecipeAddIngredient.this);
+                    allInventory = db.getAllInventories();
+                    for (Inventory inventory : allInventory)
+                    {
+                        if(inventory.getName().equals(ingredient_name))
+                        {
+                            unit_id=inventory.getUnit_id();
+                            break;
+                        }
+                    }
+                    allUnitMeasure = db.getAllUnitMeasure();
+                    for (UnitMeasure unitMeasure : allUnitMeasure)
+                    {
+                        if(unitMeasure.getId()==unit_id)
+                        {
+                            unit_metric=unitMeasure.getMetric();
+                            Log.v("RecipeAddIng unitMetric",unit_metric);
+                            break;
+                        }
+                    }
+
+                    unit.setText(unit_metric);
                 }
             }
 
@@ -280,8 +311,7 @@ public class RecipeAddIngredient extends ActionBarActivity {
         String name="", quantity="",unt="";
         db = new DBHelper(this);
 
-        qty=(EditText)findViewById(R.id.ingredientQty);
-        unit=(EditText)findViewById(R.id.ingredientUnit);
+
         if(new_ingredient==1)
             name=ingredientName.getText().toString();
         else
@@ -293,7 +323,7 @@ public class RecipeAddIngredient extends ActionBarActivity {
         //check unit table if same unit exists, if yes, get that id from unit table and use that id to store in inventory
         // table. If no, save that id and other details in unit table
 
-        List<UnitMeasure> allUnitMeasure = db.getAllUnitMeasure();
+        allUnitMeasure = db.getAllUnitMeasure();
         for (UnitMeasure unitMeasure : allUnitMeasure)
         {
             if(unitMeasure.getMetric().equals(unt))//unit already exists

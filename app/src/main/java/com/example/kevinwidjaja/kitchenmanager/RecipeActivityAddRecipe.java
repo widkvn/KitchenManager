@@ -171,22 +171,22 @@ public class RecipeActivityAddRecipe extends ActionBarActivity {
 
     public boolean AddRecipe()
     {
-        EditText recipeName,procedureField,servingField;
+        EditText recipeName,procedureField;//,servingField;
 
         String name="", procedure="";
-        int serving=0;
+        //int serving=0;
         db = new DBHelper(this);
 
         recipeName=(EditText)findViewById(R.id.recipeName);
         procedureField=(EditText)findViewById(R.id.procedure);
-        servingField=(EditText)findViewById(R.id.servings);
+        //servingField=(EditText)findViewById(R.id.servings);
 
         name=recipeName.getText().toString();
         procedure=procedureField.getText().toString();
-        serving=Integer.parseInt(servingField.getText().toString());
-        Log.v("AddRecipeServing", String.valueOf(serving));
+        //serving=Integer.parseInt(servingField.getText().toString());
+        //Log.v("AddRecipeServing", String.valueOf(serving));
 
-        Recipe recipe1 = new Recipe(temp_recipe_id,name,procedure,serving,1);
+        Recipe recipe1 = new Recipe(temp_recipe_id,name,procedure,1,1);
 
         //long recipe_id = db.createRecipe(recipe1);
         db.updateRecipe(recipe1);
