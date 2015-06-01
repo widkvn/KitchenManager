@@ -166,7 +166,7 @@ public class RecipeAddIngredient extends ActionBarActivity
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,int pos, long id)
             {
                 // TODO Auto-generated method stub
-                Toast.makeText(getApplicationContext(), "Pos selected" + pos, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Pos selected" + pos, Toast.LENGTH_LONG).show();
 
                 final int position=pos;
                 //Make an alert dialog box appear

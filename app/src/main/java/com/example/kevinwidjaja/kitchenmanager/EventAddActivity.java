@@ -180,9 +180,9 @@ public class EventAddActivity extends ActionBarActivity {
             {
                 // When clicked, show a toast with the TextView text
                 RecipeItemInEvent country = (RecipeItemInEvent) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         "Clicked on Row: " + country.getName(),
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
             }
         });
 
@@ -227,10 +227,10 @@ public class EventAddActivity extends ActionBarActivity {
                     public void onClick(View v) {
                         CheckBox cb = (CheckBox) v ;
                         RecipeItemInEvent country = (RecipeItemInEvent) cb.getTag();
-                        Toast.makeText(getApplicationContext(),
+                        /*Toast.makeText(getApplicationContext(),
                                 "Clicked on Checkbox: " + cb.getText() +
                                         " is " + cb.isChecked(),
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();*/
                         country.setSelected(cb.isChecked());
                     }
                 });
@@ -311,8 +311,8 @@ public class EventAddActivity extends ActionBarActivity {
                 }
 
 
-                Toast.makeText(getApplicationContext(),
-                        responseText, Toast.LENGTH_LONG).show();
+                /*Toast.makeText(getApplicationContext(),
+                        responseText, Toast.LENGTH_LONG).show();*/
                 Log.v("EventAdd","After toast");
                 db.close();
                 Log.v("EventAdd","Db closed");

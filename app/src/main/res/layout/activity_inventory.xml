@@ -77,7 +77,8 @@
             android:orientation="vertical"
             android:layout_width="383dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            >
 
             <ImageView
                 android:layout_width="90dp"
@@ -85,7 +86,8 @@
                 android:id="@+id/addinventory"
                 android:src="@drawable/add"
                 android:layout_gravity="center_horizontal"
-                android:onClick="addInventory"/>
+                android:onClick="addInventory"
+                />
         </LinearLayout>
 
     </LinearLayout>

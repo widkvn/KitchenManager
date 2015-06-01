@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CursorAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
@@ -25,7 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class ShoppingListActivity extends ActionBarActivity {
+public class ShoppingListActivity extends ActionBarActivity
+{
 
     private Toolbar toolbar;
     private Toolbar toolbar_bottom;
@@ -39,6 +41,9 @@ public class ShoppingListActivity extends ActionBarActivity {
     List<Inventory> allShoppingListItems;
     List<UnitMeasure> allUnitMeasure;
     List<String> stringShoppingList;
+    List<String> stringShoppingListItemName;
+
+    int position=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +102,7 @@ public class ShoppingListActivity extends ActionBarActivity {
         allShoppingListItems=db.getAllInventories();
         allUnitMeasure=db.getAllUnitMeasure();
         stringShoppingList=new ArrayList<String>();
+        stringShoppingListItemName=new ArrayList<String>();
         int shop_qty=0;
         String unit_name="";
         for (Inventory inventory : allShoppingListItems)
@@ -110,15 +116,10 @@ public class ShoppingListActivity extends ActionBarActivity {
             }
             if(shop_qty>0)
             {
+                stringShoppingListItemName.add(inventory.getName());
                 stringShoppingList.add(inventory.getName() + "\t\t\t"+String.valueOf(shop_qty) +" "+ unit_name);
             }
         }
-        for(int i=0;i<stringShoppingList.size();i++)
-        {
-
-            Log.v("SLA", stringShoppingList.get(i));
-        }
-
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1,stringShoppingList );
         lv.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -132,9 +133,69 @@ public class ShoppingListActivity extends ActionBarActivity {
             }
         });
 
+        //Long click to delete from shopping list and add to inventory
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int arg2, long arg3)
+            {
+                position=arg2;
+                //Make an alert dialog box appear
+                AlertDialog.Builder delete_ingredient=new AlertDialog.Builder(ShoppingListActivity.this);
+
+                delete_ingredient.setMessage("Bought Ingredient?");
+                delete_ingredient.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton)
+                    {
+                        Toast.makeText(getApplicationContext(), "Yes pressed", Toast.LENGTH_SHORT).show();
+
+                        yes(position);
+                    }
+                });
+                delete_ingredient.setNegativeButton("No", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int whichButton)
+                    {
+                        //Toast.makeText(getApplicationContext(), "No pressed", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                delete_ingredient.show();
+
+               return true;
+            }
+        });
+
         db.close();
     }
 
+    public void yes(int position)
+    {
+        //go to Inventory table and do qty=qty+qty_req & qty_req=0
+
+                allShoppingListItems=db.getAllInventories();
+        Log.v("SLA position value",stringShoppingListItemName.get(position));
+                for (Inventory inventory : allShoppingListItems)
+                {
+
+                    if(inventory.getName().equals(stringShoppingListItemName.get(position)))
+                    {
+                        Log.v("SLA inven match found",inventory.toString());
+                        inventory.setQuantity(inventory.getQuantity_req());
+                        db.updateInventory(inventory);
+                        break;
+                    }
+                }
+        populate_listview();
+        allShoppingListItems=db.getAllInventories();
+        for (Inventory inventory : allShoppingListItems)
+        {
+            Log.v("SLA InventoryAfterDel",inventory.getName()+" " +inventory.getQuantity_req());
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
