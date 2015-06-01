@@ -55,12 +55,12 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="280dp"
+            android:layout_height="216dp"
             android:layout_gravity="center_horizontal">
 
             <ListView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="212dp"
                 android:id="@+id/inventory_listView" />
         </LinearLayout>
 

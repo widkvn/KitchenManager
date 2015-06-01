@@ -226,8 +226,10 @@ public class InventoryActivity_edit extends ActionBarActivity {
 
         db.closeDB();
         //go back
+        /*
         Intent intent = new Intent(this, InventoryActivity.class);
-        startActivity(intent);
+        startActivity(intent);*/
+        finish();
 
     }
 }

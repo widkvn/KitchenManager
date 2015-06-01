@@ -32,6 +32,8 @@ public class InventoryActivity extends ActionBarActivity {
     private Toolbar toolbar_bottom;
 
     DBHelper db;
+    InventoryAdapter inventoryAdapter;
+    ListView newsEntryListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +83,8 @@ public class InventoryActivity extends ActionBarActivity {
 
         //Display List View
         // Setup the list view
-        final ListView newsEntryListView = (ListView) findViewById(R.id.inventory_listView);
-        final InventoryAdapter inventoryAdapter = new InventoryAdapter(this, R.layout.activity_inventory_listitem);
+        newsEntryListView = (ListView) findViewById(R.id.inventory_listView);
+        inventoryAdapter = new InventoryAdapter(this, R.layout.activity_inventory_listitem);
         newsEntryListView.setAdapter(inventoryAdapter);
 
         // Populate the list, through the adapter
@@ -236,4 +238,19 @@ public class InventoryActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        db= new DBHelper(this);
+        inventoryAdapter = new InventoryAdapter(this, R.layout.activity_inventory_listitem);
+        newsEntryListView.setAdapter(inventoryAdapter);
+
+        // Populate the list, through the adapter
+        for(final Inventory entry : getInventoryEntries()) {
+            inventoryAdapter.add(entry);
+        }
+        inventoryAdapter.notifyDataSetChanged();
+        db.close();
+    }
 }
