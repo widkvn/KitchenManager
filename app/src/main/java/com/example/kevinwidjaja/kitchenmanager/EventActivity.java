@@ -281,6 +281,11 @@ public class EventActivity extends ActionBarActivity
                 inventory.setQuantity_req(qty_req);
                 db.updateInventory(inventory);
             }
+            else
+            {
+                inventory.setQuantity_req(0);
+                db.updateInventory(inventory);
+            }
         }
         for (Inventory inventory : allInventory)
         {
@@ -332,7 +337,7 @@ public class EventActivity extends ActionBarActivity
                 calendar_var.set(year,month,day);
                 date = calendar_var.getTime();
                 sDate= sdf1.format(date);
-                Toast.makeText(getApplicationContext(), day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), day + "/" + month + "/" + year, Toast.LENGTH_LONG).show();
                 populate_list_view();
 
             }
